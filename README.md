@@ -15,7 +15,6 @@ PhantomText supports the following document formats:
 
 - PDF
 - DOCX
-- TXT
 - HTML
 
 ## Installation
