@@ -1,6 +1,6 @@
 import requests
 import numpy as np
-from .attack_base import AttackBase
+from ..attack_base import AttackBase
 
 class HomoglyphText(AttackBase):
     """

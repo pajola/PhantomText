@@ -1,4 +1,4 @@
-from .attack_base import AttackBase
+from ..attack_base import AttackBase
 
 import numpy as np
 
