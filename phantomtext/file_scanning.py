@@ -1,8 +1,8 @@
 from phantomtext.text_loader import TextLoader
-from phantomtext.zero_width_text import ZeroWidthText
-from phantomtext.homoglyph_text import HomoglyphText
-from phantomtext.diacritical_marks import DiacriticalMarks
-from phantomtext.reordering_char import BidiText
+from phantomtext.obfuscation.zero_width_text import ZeroWidthText
+from phantomtext.obfuscation.homoglyph_text import HomoglyphText
+from phantomtext.obfuscation.diacritical_marks import DiacriticalMarks
+from phantomtext.obfuscation.reordering_char import BidiText
 
 from tqdm import tqdm
 import os

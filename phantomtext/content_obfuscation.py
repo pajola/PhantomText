@@ -35,19 +35,19 @@ class ContentObfuscator:
             raise ValueError(f"Unsupported file format: {file_format}")
 
         if obfuscation_technique == "zeroWidthCharacter":
-            from .zero_width_text import ZeroWidthText 
+            from .obfuscation.zero_width_text import ZeroWidthText 
             obfuscator = ZeroWidthText(modality = modality, 
                 file_format = file_format)  # Use ZeroWidthText to embed the target context
         elif obfuscation_technique == "homoglyph":
-            from .homoglyph_text import HomoglyphText
+            from .obfuscation.homoglyph_text import HomoglyphText
             obfuscator = HomoglyphText(modality = modality, 
                 file_format = file_format)
         elif obfuscation_technique == "diacritical":
-            from .diacritical_marks import DiacriticalMarks
+            from .obfuscation.diacritical_marks import DiacriticalMarks
             obfuscator = DiacriticalMarks(modality = modality, 
                 file_format = file_format)
         elif obfuscation_technique == "bidi":
-            from .reordering_char import BidiText
+            from .obfuscation.reordering_char import BidiText
             obfuscator = BidiText(modality = modality, 
                 file_format = file_format)
         else:
