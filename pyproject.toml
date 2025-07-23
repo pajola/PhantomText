@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phantomtext"
+dynamic = ["version"]
+description = "A toolkit for content injection, obfuscation, scanning, and sanitization of various document formats."
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Luca Pajola", email = "luca.pajola@example.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Security",
+    "Topic :: Text Processing",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "Flask==2.0.1",
+    "requests==2.25.1",
+    "PyPDF2==1.26.0",
+    "python-docx==0.8.10",
+    "beautifulsoup4==4.9.3",
+    "lxml==4.6.3",
+    "pytest==6.2.4",
+    "reportlab==4.2.5",
+    "numpy>=1.19.0",
+    "tqdm>=4.60.0",
+]
+keywords = ["text", "obfuscation", "steganography", "content", "injection", "document", "security"]
+
+[project.urls]
+"Homepage" = "https://github.com/lucapajola/PhantomText"
+"Bug Reports" = "https://github.com/lucapajola/PhantomText/issues"
+"Source" = "https://github.com/lucapajola/PhantomText"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["phantomtext*"]
+
+[tool.setuptools.package-data]
+phantomtext = ["fonts/*.ttf", "fonts/*.pkl"]

@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include phantomtext/fonts *.ttf *.pkl
+recursive-include phantomtext *.py
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
