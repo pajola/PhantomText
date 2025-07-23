@@ -4,10 +4,25 @@ PhantomText is a Python library designed for handling content injection, content
 
 ## Features
 
-- **Content Injection**: Easily inject content into different document formats using the `ContentInjector` class.
-- **Content Obfuscation**: Protect sensitive information with the `ContentObfuscator` class, which obfuscates content to prevent unauthorized access.
-- **File Scanning**: Scan files for malicious content or vulnerabilities using the `FileScanner` class.
+- **Content Injection**: Easily inject content into different document formats using various steganographic techniques like zero-size text, transparent text, and out-of-bound positioning.
+- **Content Obfuscation**: Protect sensitive information with advanced obfuscation techniques including zero-width characters, homoglyphs, diacritical marks, and bidirectional text reordering.
+- **File Scanning**: Scan files for malicious content or vulnerabilities using the `FileScanner` class that detects obfuscated and injected content.
 - **File Sanitization**: Sanitize files to remove harmful content with the `FileSanitizer` class.
+
+## Attack Families
+
+### Obfuscation Attacks
+- **Zero-Width Characters**: Uses invisible Unicode characters (Zero Width Space, Zero Width Non-Joiner, etc.) to obfuscate text
+- **Homoglyph Characters**: Replaces characters with visually similar Unicode characters from different scripts
+- **Diacritical Marks**: Adds combining diacritical marks to characters to alter their appearance
+- **Bidi/Reordering**: Uses Unicode bidirectional override characters to manipulate text direction and rendering
+
+### Injection Attacks
+- **Zero-Size Injection**: Injects content using zero or near-zero font sizes to make text invisible
+- **Transparent Injection**: Injects content using transparent colors or opacity settings
+- **Camouflage Injection**: (In development) Hides content by matching background colors or patterns
+- **Out-of-Bound Injection**: (In development) Places content outside visible document boundaries
+- **Metadata Injection**: (In development) Embeds content in document metadata
 
 ## Supported Formats
 
@@ -42,18 +57,89 @@ injector.inject_content('document.pdf', 'New Content')
 from phantomtext.content_obfuscation import ContentObfuscator
 
 obfuscator = ContentObfuscator()
+
+# Basic obfuscation
 obfuscated_content = obfuscator.obfuscate_content('Sensitive Information')
+
+# Advanced obfuscation with specific techniques
+content = "Sensitive info: email@example.com and phone 123-456-7890."
+target = "email@example.com"
+
+# Zero-width character obfuscation
+obfuscated = obfuscator.obfuscate(content, target, 
+                                  obfuscation_technique="zeroWidthCharacter", 
+                                  modality="default", 
+                                  file_format="html")
+
+# Homoglyph character obfuscation
+obfuscated = obfuscator.obfuscate(content, target, 
+                                  obfuscation_technique="homoglyph", 
+                                  file_format="pdf")
+
+# Diacritical marks obfuscation
+obfuscated = obfuscator.obfuscate(content, target, 
+                                  obfuscation_technique="diacritical", 
+                                  modality="heavy", 
+                                  file_format="docx")
+
+# Bidi/reordering character obfuscation
+obfuscated = obfuscator.obfuscate(content, target, 
+                                  obfuscation_technique="bidi", 
+                                  modality="default", 
+                                  file_format="html")
 ```
 
-#### Supported Obfuscation Attacks
+### Content Injection Example
 
-| **Attack Family** | **Attack Name**         | **Variant**   | **HTML** | **DOCX** | **PDF** |
-|--------------------|-------------------------|---------------|----------|----------|---------|
-| Obfuscation        | diacritical_marks      | default       | ✅        | ✅        | ✅       |
-|                    |                        | heavy         | ✅        | ✅        | ✅       |
-| Obfuscation        | homoglyph_characters   | default       | ✅        | ✅        | ✅       |
-| Obfuscation        | zero_width_characters  | default       | ✅        | ✅        | ✅       |
-|                    |                        | heavy         | ✅        | ✅        | ✅       |
+```python
+from phantomtext.injection.zerosize_injection import ZeroSizeInjection
+from phantomtext.injection.transparent_injection import TransparentInjection
+
+# Zero-size injection
+injector = ZeroSizeInjection(modality="default", file_format="pdf")
+injector.apply(input_document="document.pdf", 
+               injection="Hidden content", 
+               output_path="injected_document.pdf")
+
+# Transparent injection
+injector = TransparentInjection(modality="opacity-0", file_format="html")
+injector.apply(input_document="document.html", 
+               injection="Invisible text", 
+               output_path="injected_document.html")
+```
+
+#### Supported Attacks
+
+##### Obfuscation Attacks
+
+| **Attack Family** | **Attack Name**           | **Variant**   | **HTML** | **DOCX** | **PDF** |
+|-------------------|---------------------------|---------------|----------|----------|---------|
+| Obfuscation       | diacritical_marks         | default       | ✅        | ✅        | ✅       |
+|                   |                           | heavy         | ✅        | ✅        | ✅       |
+| Obfuscation       | homoglyph_characters      | default       | ✅        | ✅        | ✅       |
+| Obfuscation       | zero_width_characters     | default       | ✅        | ✅        | ✅       |
+|                   |                           | heavy         | ✅        | ✅        | ✅       |
+| Obfuscation       | bidi_reordering           | default       | ✅        | ✅        | ✅       |
+|                   |                           | heavy         | ✅        | ✅        | ✅       |
+
+##### Injection Attacks
+
+| **Attack Family** | **Attack Name**           | **Variant**          | **HTML** | **DOCX** | **PDF** |
+|-------------------|---------------------------|----------------------|----------|----------|---------|
+| Injection         | zero_size                 | default              | ✅        | ✅        | ✅       |
+|                   |                           | close-to-zero        | ✅        | ❌        | ✅       |
+| Injection         | transparent               | default              | ✅        | ✅        | ✅       |
+|                   |                           | opacity-0            | ✅        | ❌        | ✅       |
+|                   |                           | opacity-close-to-zero| ✅        | ❌        | ✅       |
+|                   |                           | vanish               | ❌        | ✅        | ❌       |
+| Injection         | camouflage                | default              | 🚧        | 🚧        | 🚧       |
+| Injection         | out_of_bound              | default              | 🚧        | 🚧        | 🚧       |
+| Injection         | metadata                  | default              | 🚧        | 🚧        | 🚧       |
+
+**Legend:**
+- ✅ Implemented and working
+- ❌ Not supported for this format
+- 🚧 Placeholder implementation (not yet functional)
 
 ### File Scanning Example
 
@@ -61,8 +147,28 @@ obfuscated_content = obfuscator.obfuscate_content('Sensitive Information')
 from phantomtext.file_scanning import FileScanner
 
 scanner = FileScanner()
-scanner.scan_file('document.docx')
+
+# Scan a single file
+result = scanner.scan_file('document.docx')
+print(f"Malicious content found: {result['malicious_content_found']}")
+print(f"Vulnerabilities: {result['vulnerabilities']}")
+
+# Scan an entire directory
+reports = scanner.scan_dir('./output')
+for report in reports:
+    if report['malicious_content_found']:
+        print(f"⚠️ Issues found in {report['file_path']}")
+        for vulnerability in report['vulnerabilities']:
+            print(f"  - {vulnerability}")
 ```
+
+### Detection Capabilities
+
+The FileScanner can detect the following obfuscation techniques:
+- Zero-width character sequences
+- Homoglyph character substitutions  
+- Diacritical mark insertions
+- Bidirectional text overrides
 
 ### File Sanitization Example
 
