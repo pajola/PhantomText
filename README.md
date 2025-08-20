@@ -2,6 +2,8 @@
 
 <img src="./phantomText.jpg" alt="image info" width="200"/>
 
+Official experiment repo of our paper "The Hidden Threat in Plain Text: Attacking RAG Data Loaders" presented at ACM AISec 2025 (CCS workshop).
+
 PhantomText is a Python library designed for handling content injection, content obfuscation, file scanning, and file sanitization across various document formats. This toolkit provides a comprehensive set of tools to manage and secure document content effectively.
 
 ## Features
@@ -184,6 +186,17 @@ sanitizer.sanitize_file('malicious_file.txt')
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any enhancements or bug fixes.
+
+## Cite
+
+    @article{castagnaro2025hidden,
+      title={The Hidden Threat in Plain Text: Attacking RAG Data Loaders},
+      author={Castagnaro, Alberto and Salviati, Umberto and Conti, Mauro and Pajola, Luca and Pizzi, Simeone},
+      journal={arXiv preprint arXiv:2507.05093},
+      year={2025}
+    }
+
+
 
 ## License
 
