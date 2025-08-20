@@ -1,5 +1,7 @@
 # PhantomText Toolkit
 
+<img src="./phantomText.jpg" alt="image info" width="200"/>
+
 PhantomText is a Python library designed for handling content injection, content obfuscation, file scanning, and file sanitization across various document formats. This toolkit provides a comprehensive set of tools to manage and secure document content effectively.
 
 ## Features
