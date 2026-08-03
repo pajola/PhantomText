@@ -1,0 +1,34 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging / build
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+
+# Test / generated output
+output/
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+# (uv.lock IS committed; do not ignore it)
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

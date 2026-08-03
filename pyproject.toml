@@ -47,7 +47,7 @@ keywords = ["text", "obfuscation", "steganography", "content", "injection", "doc
 "Source" = "https://github.com/lucapajola/PhantomText"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 include = ["phantomtext*"]
 
 [tool.setuptools.package-data]
