@@ -1,7 +1,9 @@
-from ..attack_base_injection import AttackBase
+from ..core.base import InjectionAttack
 
 
-class CamouflageInjection(AttackBase):
+class CamouflageInjection(InjectionAttack):
+    name = "camouflage"
+
     def __init__(self, modality="default", file_format="pdf"):
         pass
 
@@ -18,4 +20,4 @@ class CamouflageInjection(AttackBase):
         pass
 
     def check(self, input_document):
-        return True
+        return False  # TODO(ARC-202): implement injection detection

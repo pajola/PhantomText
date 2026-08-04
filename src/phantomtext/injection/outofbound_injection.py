@@ -9,10 +9,12 @@ from PyPDF2 import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-from ..attack_base_injection import AttackBase
+from ..core.base import InjectionAttack
 
 
-class OutOfBoundInjection(AttackBase):
+class OutOfBoundInjection(InjectionAttack):
+    name = "out_of_bound"
+
     def __init__(self, modality="default", file_format="pdf"):
         if file_format == "pdf" or file_format == "html" or file_format == "docx":
             self.file_format = file_format
@@ -209,4 +211,4 @@ class OutOfBoundInjection(AttackBase):
         return zones[random.choice(list(zones.keys()))]
 
     def check(self, input_document):
-        return True
+        return False  # TODO(ARC-202): implement injection detection

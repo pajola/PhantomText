@@ -26,7 +26,8 @@ handoff machinery. **Exit:** `uv sync` clean, CI green, docs skeleton live, ever
 ## Season 1 — Core API Consolidation (Attack Engine v1)
 **Goal:** one coherent, typed, stable public API; kill the duplicate/stub façades. **Exit:** `0.2.0` + migration guide.
 
-- ☐ **ARC-101 — Unify `AttackBase`** — single abstraction for obfuscation + injection (`apply / check / sanitize`).
+- ◐ **ARC-101 — Unify `AttackBase`** — `core/base.py`: `Attack` root + `ObfuscationAttack` + `InjectionAttack`;
+  migrated all 8 techniques; `sanitized`→`sanitize` (aliased); honest injection `check()` stubs. *(done, awaiting review)*
 - ☐ **ARC-102 — Vendor Unicode data offline** — homoglyph/confusables tables shipped in-package; remove runtime
   network calls; add a refresh tool.
 - ☐ **ARC-103 — String-first public API** — `scan / obfuscate / inject / sanitize` on `str`; file layer wraps it;

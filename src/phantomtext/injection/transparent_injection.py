@@ -7,10 +7,12 @@ from docx.shared import RGBColor
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 
-from ..attack_base_injection import AttackBase
+from ..core.base import InjectionAttack
 
 
-class TransparentInjection(AttackBase):
+class TransparentInjection(InjectionAttack):
+    name = "transparent"
+
     def __init__(self, modality="default", file_format="pdf"):
 
         if file_format == "pdf" or file_format == "html":
@@ -159,4 +161,4 @@ class TransparentInjection(AttackBase):
                 f.write(str(soup))
 
     def check(self, input_document):
-        return True
+        return False  # TODO(ARC-202): implement injection detection
