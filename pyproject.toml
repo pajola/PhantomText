@@ -80,12 +80,21 @@ ignore = ["E501"]
 "tests/**" = ["B", "E501", "F401"]
 
 [tool.mypy]
-python_version = "3.9"
+# Type-check target is 3.10 (the lowest recent mypy accepts). Runtime support
+# for 3.9 is still verified by the build/test CI matrix. Tightened in Season 1.
+python_version = "3.10"
 files = ["src/phantomtext"]
 ignore_missing_imports = true
-# Kept lenient for now; tightened as the code is typed in Season 1.
 disallow_untyped_defs = false
 warn_unused_ignores = true
+
+# numpy is a temporary dependency (removed in ARC-105). Don't analyze it or its
+# stubs — recent numpy stubs use `type X = ...` syntax mypy rejects below 3.12,
+# which otherwise breaks the type-check job depending on the runner's Python.
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"

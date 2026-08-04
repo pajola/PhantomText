@@ -40,5 +40,31 @@ jobs:
       - name: Import smoke test
         run: uv run --python ${{ matrix.python-version }} python -c "import phantomtext; print(phantomtext.__version__)"
 
-  # NOTE: a pytest job and mypy gating are intentionally deferred to ARC-004,
-  # once the test suite runs offline and deterministically.
+  test:
+    name: Tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Sync (dev)
+        run: uv sync --extra dev --python ${{ matrix.python-version }}
+      - name: Pytest (offline, deterministic)
+        run: uv run --python ${{ matrix.python-version }} pytest --cov=phantomtext --cov-report=term-missing
+
+  types:
+    name: Type check (mypy, non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true  # informational until the code is typed in Season 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Sync (dev)
+        run: uv sync --extra dev
+      - name: Mypy
+        run: uv run mypy src/phantomtext
