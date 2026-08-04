@@ -47,5 +47,5 @@ Columns: **str** = raw Unicode string · then file formats · **Detect** = scann
 | Plugin API | ☐ | ARC-302 |
 | Docs site | ☐ | ARC-303 |
 | Build/packaging (Hatchling, PEP 621) | ✅ | ARC-003 |
-| CI (ruff lint/format + build-import matrix) | 🟡 | ARC-003 — pytest/mypy gating deferred to ARC-004 |
-| Offline deterministic test suite | ☐ | ARC-004 |
+| CI (ruff + build-import + pytest matrix + mypy) | ✅ | ARC-003/004 (mypy non-blocking) |
+| Offline deterministic test suite | ✅ | ARC-004 — 18 passed, 2 xfailed, no network |

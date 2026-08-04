@@ -20,8 +20,8 @@ handoff machinery. **Exit:** `uv sync` clean, CI green, docs skeleton live, ever
 - ◐ **ARC-003 — Build & tooling** — Hatchling + single PEP 621 `pyproject.toml`; delete `setup.py`,
   `requirements.txt`, `build_package.sh`, `MANIFEST.in`; single-source version; metadata fixes; ruff + mypy +
   pytest; GitHub Actions CI (lint + build/import matrix); pre-commit. *(done, awaiting review)*
-- ☐ **ARC-004 — Deterministic offline test baseline** — pin behavior of the working core with tests that never
-  touch the network and are RNG-seeded.
+- ◐ **ARC-004 — Deterministic offline test baseline** — pin behavior of the working core with tests that never
+  touch the network and are RNG-seeded; pytest + mypy CI jobs. *(done, awaiting review — closes Season 0)*
 
 ## Season 1 — Core API Consolidation (Attack Engine v1)
 **Goal:** one coherent, typed, stable public API; kill the duplicate/stub façades. **Exit:** `0.2.0` + migration guide.
