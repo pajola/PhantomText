@@ -1,12 +1,14 @@
 import numpy as np
 
-from ..attack_base import AttackBase
+from ..core.base import ObfuscationAttack
 
 
-class DiacriticalMarks(AttackBase):
+class DiacriticalMarks(ObfuscationAttack):
     """
     An obfuscation attack that uses diacritical marks to obfuscate text.
     """
+
+    name = "diacritical"
 
     def __init__(self, modality="default", file_format="pdf"):
         """
@@ -125,7 +127,7 @@ class DiacriticalMarks(AttackBase):
         # Check for diacritical marks
         return any(c in self.diacritical_marks for c in input_text)
 
-    def sanitized(self, input_text):
+    def sanitize(self, input_text):
         """
         Sanitizes the input text by removing diacritical marks.
 

@@ -11,3 +11,4 @@ Every meaningful decision is an Architecture Decision Record (ADR). This is the 
 | [004](ADR-004-dependencies.md) | Batteries-included dependencies | Accepted | 2026-08-03 |
 | [005](ADR-005-arc-workflow.md) | Per-arc branches & PRs | Accepted | 2026-08-03 |
 | [006](ADR-006-build-backend.md) | Build backend: Hatchling | Accepted | 2026-08-04 |
+| [007](ADR-007-attack-base-hierarchy.md) | Attack base-class hierarchy | Accepted | 2026-08-04 |

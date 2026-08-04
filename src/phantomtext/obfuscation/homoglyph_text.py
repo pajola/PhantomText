@@ -1,13 +1,15 @@
 import numpy as np
 import requests
 
-from ..attack_base import AttackBase
+from ..core.base import ObfuscationAttack
 
 
-class HomoglyphText(AttackBase):
+class HomoglyphText(ObfuscationAttack):
     """
     An obfuscation attack that uses homoglyph substitution to obfuscate text.
     """
+
+    name = "homoglyph"
 
     def __init__(self, modality="default", file_format="pdf"):
         """
@@ -114,7 +116,7 @@ class HomoglyphText(AttackBase):
         homoglyph_set = {glyph for glyphs in self.homoglyphs.values() for glyph in glyphs}
         return any(c in homoglyph_set for c in input_text)
 
-    def sanitized(self, input_text):
+    def sanitize(self, input_text):
         """
         Sanitizes the input text by replacing homoglyphs with their base characters.
 

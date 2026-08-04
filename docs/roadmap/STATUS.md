@@ -38,6 +38,7 @@ Columns: **str** = raw Unicode string · then file formats · **Detect** = scann
 ## Cross-cutting capabilities
 | Capability | Status | Notes |
 |-----------|:------:|-------|
+| Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
 | String-first API | ☐ | ARC-103 |
 | Batch / parallel processing | ☐ | ARC-106 |
 | SecurityPolicy / profiles | ☐ | ARC-201 |

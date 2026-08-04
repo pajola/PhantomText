@@ -1,4 +1,4 @@
-from ..attack_base import AttackBase
+from ..core.base import ObfuscationAttack
 
 # Define Unicode Bidi override characters
 PDF = chr(0x202C)
@@ -8,10 +8,12 @@ LRO = chr(0x202D)
 RLO = chr(0x202E)
 
 
-class BidiText(AttackBase):
+class BidiText(ObfuscationAttack):
     """
     An obfuscation attack that uses Unicode Bidi characters to obfuscate text.
     """
+
+    name = "bidi"
 
     def __init__(self, modality="default", file_format="html"):
         """
@@ -104,7 +106,7 @@ class BidiText(AttackBase):
         # Check for Bidi characters
         return any(c in self.bidi_chars for c in input_text)
 
-    def sanitized(self, input_text):
+    def sanitize(self, input_text):
         """
         Sanitizes the input text by removing Bidi characters.
 
