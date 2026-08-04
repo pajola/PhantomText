@@ -1,7 +1,6 @@
-import docx
 from docx import Document
+from docx.oxml.ns import qn  # To set complex script fonts like Arabic/East Asian
 from docx.shared import Pt
-from docx.oxml.ns import qn # To set complex script fonts like Arabic/East Asian
 
 
 class DOCXHandler:
@@ -21,10 +20,10 @@ class DOCXHandler:
             for paragraph in document.paragraphs:
                 text += paragraph.text + "\n"
         except Exception as e:
-            raise ValueError(f"Error reading DOCX file: {str(e)}")
+            raise ValueError(f"Error reading DOCX file: {str(e)}") from e
         return text
 
-    def write_docx(self, file_path, content, font_name='DejaVuSans'):
+    def write_docx(self, file_path, content, font_name="DejaVuSans"):
         """
         Saves the given text as a DOCX file.
 
@@ -50,9 +49,9 @@ class DOCXHandler:
             # For broader compatibility, especially with complex scripts (like Arabic, CJK),
             # it's good practice to set the 'complex script' font hint too.
             # This requires understanding the underlying XML structure (using oxml).
-            r = run._r # Get the underlying XML element for the run
-            r.rPr.rFonts.set(qn('w:cs'), font_name) # Set complex script font
-            r.rPr.rFonts.set(qn('w:eastAsia'), font_name) # Set East Asian font hint
+            r = run._r  # Get the underlying XML element for the run
+            r.rPr.rFonts.set(qn("w:cs"), font_name)  # Set complex script font
+            r.rPr.rFonts.set(qn("w:eastAsia"), font_name)  # Set East Asian font hint
 
             # Optional: Set font size
             run.font.size = Pt(12)

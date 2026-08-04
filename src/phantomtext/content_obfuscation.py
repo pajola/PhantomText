@@ -1,12 +1,11 @@
-
 class ContentObfuscator:
     def obfuscate_content(self, content):
         """
         Obfuscates sensitive information in the provided content.
-        
+
         Args:
             content (str): The content to obfuscate.
-        
+
         Returns:
             str: The obfuscated content.
         """
@@ -35,28 +34,30 @@ class ContentObfuscator:
             raise ValueError(f"Unsupported file format: {file_format}")
 
         if obfuscation_technique == "zeroWidthCharacter":
-            from .obfuscation.zero_width_text import ZeroWidthText 
-            obfuscator = ZeroWidthText(modality = modality, 
-                file_format = file_format)  # Use ZeroWidthText to embed the target context
+            from .obfuscation.zero_width_text import ZeroWidthText
+
+            obfuscator = ZeroWidthText(
+                modality=modality, file_format=file_format
+            )  # Use ZeroWidthText to embed the target context
         elif obfuscation_technique == "homoglyph":
             from .obfuscation.homoglyph_text import HomoglyphText
-            obfuscator = HomoglyphText(modality = modality, 
-                file_format = file_format)
+
+            obfuscator = HomoglyphText(modality=modality, file_format=file_format)
         elif obfuscation_technique == "diacritical":
             from .obfuscation.diacritical_marks import DiacriticalMarks
-            obfuscator = DiacriticalMarks(modality = modality, 
-                file_format = file_format)
+
+            obfuscator = DiacriticalMarks(modality=modality, file_format=file_format)
         elif obfuscation_technique == "bidi":
             from .obfuscation.reordering_char import BidiText
-            obfuscator = BidiText(modality = modality, 
-                file_format = file_format)
+
+            obfuscator = BidiText(modality=modality, file_format=file_format)
         else:
             raise ValueError(f"Unsupported obfuscation technique: {obfuscation_technique}")
 
-        #apply the obfuscation 
+        # apply the obfuscation
         y_obf = obfuscator.apply(y)
 
-        #replace the target context with the obfuscated value
+        # replace the target context with the obfuscated value
         result = x.replace(y, y_obf)
 
         return result

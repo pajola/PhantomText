@@ -1,6 +1,6 @@
 class HTMLHandler:
     def read_html(self, file_path):
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, encoding="utf-8") as file:
             return file.read()
 
     def write_html(self, file_path, content, html_title="Document", create_html=True):
@@ -34,7 +34,7 @@ class HTMLHandler:
     </html>
             """
         else:
-            html_content = content 
+            html_content = content
 
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(html_content)

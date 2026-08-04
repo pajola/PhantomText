@@ -1,6 +1,7 @@
+import numpy as np
+
 from ..attack_base import AttackBase
 
-import numpy as np
 
 class DiacriticalMarks(AttackBase):
     """
@@ -12,24 +13,24 @@ class DiacriticalMarks(AttackBase):
         Initializes the DiacriticalMarksText attack with default modality and file format.
 
         Args:
-            modality (str): The modality of the attack (e.g., "default"). 
+            modality (str): The modality of the attack (e.g., "default").
             file_format (str): The format of the file (e.g., "pdf"). Default is "pdf".
         """
         super().__init__(modality, file_format)
 
         # Define the list of diacritical marks
         self.diacritical_marks = [
-            u"\u0300",  # Grave Accent
-            u"\u0301",  # Acute Accent
-            u"\u0302",  # Circumflex
-            u"\u0303",  # Tilde
-            u"\u0304",  # Macron
-            u"\u0305",  # Overline
-            u"\u0306",  # Breve
-            u"\u0307",  # Dot Above
-            u"\u0308",  # Diaeresis
-            u"\u0309",  # Hook Above
-            u"\u030A",  # Ring Above
+            "\u0300",  # Grave Accent
+            "\u0301",  # Acute Accent
+            "\u0302",  # Circumflex
+            "\u0303",  # Tilde
+            "\u0304",  # Macron
+            "\u0305",  # Overline
+            "\u0306",  # Breve
+            "\u0307",  # Dot Above
+            "\u0308",  # Diaeresis
+            "\u0309",  # Hook Above
+            "\u030a",  # Ring Above
         ]
         self.num_diacritical_marks = len(self.diacritical_marks)
 
@@ -60,35 +61,41 @@ class DiacriticalMarks(AttackBase):
         if self.modality == "default":
             # Split text into words
             words = input_text.split()
-            
+
             # Insert a random diacritical mark in each word
             for word in words:
                 if len(word) > 2:
-                    diacritical = self.diacritical_marks[np.random.randint(0, self.num_diacritical_marks)]
-                    insert_position = np.random.randint(1, len(word) -1)
+                    diacritical = self.diacritical_marks[
+                        np.random.randint(0, self.num_diacritical_marks)
+                    ]
+                    insert_position = np.random.randint(1, len(word) - 1)
                     obfuscated_word = word[:insert_position] + diacritical + word[insert_position:]
                     output.append(obfuscated_word)
                 else:
                     # If the word is too short, just append it without obfuscation
                     output.append(word)
-            
+
             # Join words back into a string
-            output = ' '.join(output)
+            output = " ".join(output)
         elif self.modality == "heavy":
             """ This modality inserts multiple diacritical marks in each word. """
             words = input_text.split()
-            
+
             for word in words:
                 obfuscated_word = word
-                diacritical = self.diacritical_marks[np.random.randint(0, self.num_diacritical_marks)]
-                insert_position = np.random.randint(1, len(word) -1)
-                obfuscated_word = word[:insert_position] + ''.join([diacritical] * 10) + word[insert_position:]
+                diacritical = self.diacritical_marks[
+                    np.random.randint(0, self.num_diacritical_marks)
+                ]
+                insert_position = np.random.randint(1, len(word) - 1)
+                obfuscated_word = (
+                    word[:insert_position] + "".join([diacritical] * 10) + word[insert_position:]
+                )
                 output.append(obfuscated_word)
-                
-            output = ' '.join(output)
+
+            output = " ".join(output)
         else:
             raise ValueError(f"Unsupported modality: {self.modality} for DOCX")
-        
+
         return output
 
     def _obfuscate_pdf(self, input_text):
@@ -117,7 +124,7 @@ class DiacriticalMarks(AttackBase):
         """
         # Check for diacritical marks
         return any(c in self.diacritical_marks for c in input_text)
-    
+
     def sanitized(self, input_text):
         """
         Sanitizes the input text by removing diacritical marks.
@@ -129,5 +136,5 @@ class DiacriticalMarks(AttackBase):
             str: The sanitized text without diacritical marks.
         """
         # Remove diacritical marks
-        sanitized_text = ''.join(c for c in input_text if c not in self.diacritical_marks)
+        sanitized_text = "".join(c for c in input_text if c not in self.diacritical_marks)
         return sanitized_text

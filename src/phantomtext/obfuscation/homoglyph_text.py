@@ -1,6 +1,8 @@
-import requests
 import numpy as np
+import requests
+
 from ..attack_base import AttackBase
+
 
 class HomoglyphText(AttackBase):
     """
@@ -12,7 +14,7 @@ class HomoglyphText(AttackBase):
         Initializes the HomoglyphText attack with default modality and file format.
 
         Args:
-            modality (str): The modality of the attack (e.g., "default"). 
+            modality (str): The modality of the attack (e.g., "default").
             file_format (str): The format of the file (e.g., "pdf"). Default is "pdf".
         """
         super().__init__(modality, file_format)
@@ -27,12 +29,14 @@ class HomoglyphText(AttackBase):
         Returns:
             dict: A dictionary mapping base characters to their homoglyphs.
         """
-        intentionals = dict()
-        int_resp = requests.get("https://www.unicode.org/Public/security/latest/intentional.txt", stream=True)
+        intentionals = {}
+        int_resp = requests.get(
+            "https://www.unicode.org/Public/security/latest/intentional.txt", stream=True
+        )
         for line in int_resp.iter_lines():
             if len(line):
-                line = line.decode('utf-8-sig')
-                if line[0] != '#':
+                line = line.decode("utf-8-sig")
+                if line[0] != "#":
                     line = line.replace("#*", "#")
                     _, line = line.split("#", maxsplit=1)
                     if line[3] not in intentionals:
@@ -95,7 +99,7 @@ class HomoglyphText(AttackBase):
                 # Keep the character as is if no homoglyph is available
                 output.append(char)
 
-        return ''.join(output)
+        return "".join(output)
 
     def check(self, input_text):
         """
@@ -120,6 +124,8 @@ class HomoglyphText(AttackBase):
         Returns:
             str: The sanitized text with homoglyphs replaced by base characters.
         """
-        reverse_mapping = {glyph: base for base, glyphs in self.homoglyphs.items() for glyph in glyphs}
-        sanitized_text = ''.join(reverse_mapping.get(c, c) for c in input_text)
+        reverse_mapping = {
+            glyph: base for base, glyphs in self.homoglyphs.items() for glyph in glyphs
+        }
+        sanitized_text = "".join(reverse_mapping.get(c, c) for c in input_text)
         return sanitized_text

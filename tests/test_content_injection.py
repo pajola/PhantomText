@@ -1,8 +1,9 @@
 import unittest
+
 from phantomtext.content_injection import ContentInjector
 
-class TestContentInjector(unittest.TestCase):
 
+class TestContentInjector(unittest.TestCase):
     def setUp(self):
         self.injector = ContentInjector()
 
@@ -36,5 +37,6 @@ class TestContentInjector(unittest.TestCase):
         with self.assertRaises(ValueError):  # Assuming it raises ValueError for unsupported formats
             self.injector.inject_content(document, content)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

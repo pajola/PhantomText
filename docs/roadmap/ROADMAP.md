@@ -15,11 +15,11 @@ Legend: ☐ not started · ◐ in progress · ☑ done
 **Goal:** a clean, trustworthy skeleton that preserves the working core with *no behavior changes*, plus the
 handoff machinery. **Exit:** `uv sync` clean, CI green, docs skeleton live, everything that worked still works.
 
-- ◐ **ARC-001 — Governance scaffold** — ROADMAP, STATUS, HANDOFF, CLAUDE.md, ADR-001…005. *(committed, awaiting push/merge)*
-- ◐ **ARC-002 — Repo hygiene** — adopt `src/` layout; quarantine dead files (`test.py`, `font-poisoning.py`,
-  `output/`, stray PDFs/HTML/`dist`); `.gitignore`. *(done, awaiting review)* (metadata fixes moved to ARC-003)
-- ☐ **ARC-003 — Build & tooling** — uv + single PEP 621 `pyproject.toml`; delete `setup.py`, `requirements.txt`,
-  `build_package.sh`; single-source version; ruff + mypy + pytest; GitHub Actions CI matrix; pre-commit.
+- ☑ **ARC-001 — Governance scaffold** — ROADMAP, STATUS, HANDOFF, CLAUDE.md, ADR-001…005. *(merged, #1)*
+- ☑ **ARC-002 — Repo hygiene** — adopt `src/` layout; quarantine dead files; `.gitignore`. *(merged, #3)*
+- ◐ **ARC-003 — Build & tooling** — Hatchling + single PEP 621 `pyproject.toml`; delete `setup.py`,
+  `requirements.txt`, `build_package.sh`, `MANIFEST.in`; single-source version; metadata fixes; ruff + mypy +
+  pytest; GitHub Actions CI (lint + build/import matrix); pre-commit. *(done, awaiting review)*
 - ☐ **ARC-004 — Deterministic offline test baseline** — pin behavior of the working core with tests that never
   touch the network and are RNG-seeded.
 

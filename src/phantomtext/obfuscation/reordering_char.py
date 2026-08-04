@@ -1,5 +1,4 @@
 from ..attack_base import AttackBase
-import numpy as np
 
 # Define Unicode Bidi override characters
 PDF = chr(0x202C)
@@ -7,6 +6,7 @@ LRE = chr(0x202A)
 RLE = chr(0x202B)
 LRO = chr(0x202D)
 RLO = chr(0x202E)
+
 
 class BidiText(AttackBase):
     """
@@ -18,7 +18,7 @@ class BidiText(AttackBase):
         Initializes the BidiText attack with default modality and file format.
 
         Args:
-            modality (str): The modality of the attack (e.g., "default"). 
+            modality (str): The modality of the attack (e.g., "default").
             file_format (str): The format of the file (e.g., "html"). Default is "html".
         """
         super().__init__(modality, file_format)
@@ -56,22 +56,22 @@ class BidiText(AttackBase):
             # Wrap each character with Bidi override characters
             for c in input_text:
                 output.append(LRO)  # Start Left-to-Right override
-                output.append(c)    # Add the actual character
+                output.append(c)  # Add the actual character
                 output.append(PDF)  # End override
 
             # Convert list to string
-            output = ''.join(output)
+            output = "".join(output)
         elif self.modality == "heavy":
             """ This modality wraps each character with multiple Bidi overrides. """
             for c in input_text:
                 for _ in range(5):  # Add multiple Bidi overrides for heavy obfuscation
                     output.append(LRO)  # Start Left-to-Right override
-                output.append(c)        # Add the actual character
+                output.append(c)  # Add the actual character
                 for _ in range(5):  # Add multiple Bidi overrides for heavy obfuscation
                     output.append(PDF)  # End override
 
             # Convert list to string
-            output = ''.join(output)
+            output = "".join(output)
         else:
             raise ValueError(f"Unsupported modality: {self.modality} for HTML")
 
@@ -115,5 +115,5 @@ class BidiText(AttackBase):
             str: The sanitized text without Bidi characters.
         """
         # Remove Bidi characters
-        sanitized_text = ''.join(c for c in input_text if c not in self.bidi_chars)
+        sanitized_text = "".join(c for c in input_text if c not in self.bidi_chars)
         return sanitized_text

@@ -7,28 +7,30 @@ It is the handoff between sessions.
 
 ## Current position
 - **Season:** 0 — Foundation & Governance
-- **Active arc:** ARC-002 — Repo hygiene (committed locally, awaiting review)
-- **Branch:** `arc/002-repo-hygiene` (off `arc/001-governance`)
+- **Active arc:** ARC-003 — Build & tooling (done, awaiting review)
+- **Branch:** `arc/003-build-tooling` (off `main`)
 - **Next release target:** 0.2.0 (end of Season 1)
 
-## Git state (nothing pushed yet — no credentials on this machine)
-- `arc/001-governance` @ `ac97ab1` — governance scaffold (committed, not pushed).
-- `arc/002-repo-hygiene` — src-layout + hygiene (about to commit).
-- **Push is blocked** pending maintainer setting up `gh auth` / SSH. Once available: push both, open PRs.
+## Git state
+- `main` @ `cbeec23` — ARC-001 (#1) + ARC-002 (#3) merged. Auth works via gh (Luca's classic PAT).
+- `arc/003-build-tooling` — Hatchling build + tooling + CI (about to commit & PR).
+- Env: `uv` verified — `uv sync` + import OK on Python 3.9.25 and 3.14.
 
-## Done (2026-08-03)
-- Analyzed `phantomtext` 0.1.1; agreed positioning/repo/cadence; cloned repo; accepted ADR-001…005.
-- ARC-001: wrote governance scaffold (CLAUDE.md, ROADMAP, STATUS, HANDOFF, ADR-001…005). Committed.
-- ARC-002: `src/` layout move + dead-file/artifact quarantine + `.gitignore` + minimal `pyproject` fix.
-  28 core files now under `src/phantomtext/`; root cleaned; history preserved.
+## Done
+- 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout/hygiene) written, merged to `main` (PRs #1, #3).
+  (Note: original stacked PR #2 was auto-closed when its base branch was deleted during #1's merge; arc/002
+  was rebased onto main and re-merged as #3.)
+- 2026-08-04 — ARC-003: Hatchling PEP 621 build; deleted setup.py/requirements.txt/build_package.sh/MANIFEST.in;
+  metadata fixed; deps corrected (drop Flask, PyPDF2>=3.0, pytest→dev); ruff/mypy/pytest config; pre-commit;
+  CI workflow; ruff format+autofix baseline (+5 hand fixes); requires-python >=3.9. ADR-006 (Hatchling) accepted.
 
 ## Next steps
-1. Maintainer sets up push credentials → push `arc/001` and `arc/002`, open the two PRs.
-2. Start ARC-003 (build & tooling: PEP 621 rewrite, delete setup.py/requirements.txt/build_package.sh,
-   fix metadata author-email + repo-URL, trim deps Flask/requests/numpy, add ruff/mypy/pytest + CI).
+1. Push `arc/003-build-tooling`, open PR → `main`; maintainer reviews CI + merges.
+2. Then **ARC-004** (deterministic offline test baseline): make the existing tests run without network and
+   without writing to `./output`; add a pytest CI job + mypy (non-blocking) once green. Closes Season 0.
 
 ## Open questions / awaiting maintainer
-- Push credentials (gh auth or SSH key) — blocks all pushes/PRs.
+- Review & merge ARC-003 PR (watch CI).
 
 ## Key findings from the 0.1.1 audit (context for upcoming arcs)
 - Two duplicate `AttackBase` classes with incompatible signatures.
