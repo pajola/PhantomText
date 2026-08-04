@@ -1,5 +1,6 @@
 from phantomtext.content_obfuscation import ContentObfuscator
 
+
 def main():
     # Create an instance of the ContentObfuscator
     obfuscator = ContentObfuscator()
@@ -13,6 +14,7 @@ def main():
     # Print the original and obfuscated content
     print("Original Content:", sensitive_content)
     print("Obfuscated Content:", obfuscated_content)
+
 
 if __name__ == "__main__":
     main()

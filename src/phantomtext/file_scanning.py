@@ -1,11 +1,13 @@
-from phantomtext.text_loader import TextLoader
-from phantomtext.obfuscation.zero_width_text import ZeroWidthText
-from phantomtext.obfuscation.homoglyph_text import HomoglyphText
-from phantomtext.obfuscation.diacritical_marks import DiacriticalMarks
-from phantomtext.obfuscation.reordering_char import BidiText
+import os
 
 from tqdm import tqdm
-import os
+
+from phantomtext.obfuscation.diacritical_marks import DiacriticalMarks
+from phantomtext.obfuscation.homoglyph_text import HomoglyphText
+from phantomtext.obfuscation.reordering_char import BidiText
+from phantomtext.obfuscation.zero_width_text import ZeroWidthText
+from phantomtext.text_loader import TextLoader
+
 
 class FileScanner:
     def __init__(self):
@@ -25,11 +27,7 @@ class FileScanner:
         Returns:
             dict: A report indicating the presence of any malicious content or vulnerabilities.
         """
-        report = {
-            "file_path": file_path,
-            "malicious_content_found": False,
-            "vulnerabilities": []
-        }
+        report = {"file_path": file_path, "malicious_content_found": False, "vulnerabilities": []}
 
         try:
             # Load the text from the file
@@ -49,7 +47,6 @@ class FileScanner:
             if self.bidi_checker.check(text):
                 report["malicious_content_found"] = True
                 report["vulnerabilities"].append("Bidi characters detected.")
-
 
             # Check for zero-width characters
             if self.zero_width_checker.check(text):

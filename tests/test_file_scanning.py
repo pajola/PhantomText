@@ -1,5 +1,7 @@
 import unittest
+
 from phantomtext.file_scanning import FileScanner
+
 
 class TestFileScanner(unittest.TestCase):
     def setUp(self):
@@ -28,6 +30,7 @@ class TestFileScanner(unittest.TestCase):
             self.assertIn("file_path", report)  # Ensure each report has a file path
             self.assertIn("malicious_content_found", report)  # Ensure the key exists
             self.assertIn("vulnerabilities", report)  # Ensure vulnerabilities are listed
+
 
 if __name__ == "__main__":
     unittest.main()

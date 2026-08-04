@@ -1,6 +1,7 @@
-from phantomtext.formats.pdf import PDFHandler
 from phantomtext.formats.docx import DOCXHandler
 from phantomtext.formats.html import HTMLHandler
+from phantomtext.formats.pdf import PDFHandler
+
 
 class TextSaver:
     def __init__(self):
@@ -19,11 +20,11 @@ class TextSaver:
         Raises:
             ValueError: If the file format is unsupported.
         """
-        if file_path.endswith('.pdf'):
+        if file_path.endswith(".pdf"):
             self.pdf_handler.write_pdf(file_path, text_content)
-        elif file_path.endswith('.docx'):
+        elif file_path.endswith(".docx"):
             self.docx_handler.write_docx(file_path, text_content)
-        elif file_path.endswith('.html'):
+        elif file_path.endswith(".html"):
             self.html_handler.write_html(file_path, text_content)
         else:
             raise ValueError(f"Unsupported file format: {file_path}")

@@ -10,3 +10,4 @@ Every meaningful decision is an Architecture Decision Record (ADR). This is the 
 | [003](ADR-003-build-tooling.md) | uv + PEP 621 build & tooling | Accepted | 2026-08-03 |
 | [004](ADR-004-dependencies.md) | Batteries-included dependencies | Accepted | 2026-08-03 |
 | [005](ADR-005-arc-workflow.md) | Per-arc branches & PRs | Accepted | 2026-08-03 |
+| [006](ADR-006-build-backend.md) | Build backend: Hatchling | Accepted | 2026-08-04 |

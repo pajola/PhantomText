@@ -1,16 +1,19 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "phantomtext"
-dynamic = ["version"]
-description = "A toolkit for content injection, obfuscation, scanning, and sanitization of various document formats."
+version = "0.2.0.dev0"
+description = "A toolkit for content injection, obfuscation, scanning, and sanitization of plain text and PDF/DOCX/HTML documents."
 readme = "README.md"
+requires-python = ">=3.9"
 license = "MIT"
+license-files = ["LICENSE"]
 authors = [
-    {name = "Luca Pajola", email = "luca.pajola@example.com"}
+    { name = "Luca Pajola", email = "lucapajola94@gmail.com" },
 ]
+keywords = ["text", "obfuscation", "steganography", "injection", "document", "security", "unicode"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -19,36 +22,72 @@ classifiers = [
     "Topic :: Text Processing",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
 ]
-requires-python = ">=3.7"
+
+# Runtime dependencies. NOTE: `requests` and `numpy` are kept only until the
+# Season-1 code arcs that remove them (ARC-102 vendors homoglyph data offline;
+# ARC-105 replaces numpy's trivial RNG use with stdlib `random`).
 dependencies = [
-    "Flask==2.0.1",
-    "requests==2.25.1",
-    "PyPDF2==1.26.0",
-    "python-docx==0.8.10",
-    "beautifulsoup4==4.9.3",
-    "lxml==4.6.3",
-    "pytest==6.2.4",
-    "reportlab==4.2.5",
-    "numpy>=1.19.0",
-    "tqdm>=4.60.0",
+    "PyPDF2>=3.0",
+    "python-docx>=1.1",
+    "beautifulsoup4>=4.11",
+    "lxml>=4.9",
+    "reportlab>=4.0",
+    "tqdm>=4.62",
+    "requests>=2.28",
+    "numpy>=1.23",
 ]
-keywords = ["text", "obfuscation", "steganography", "content", "injection", "document", "security"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.6",
+    "mypy>=1.8",
+    "pre-commit>=3.5",
+    "types-requests",
+]
 
 [project.urls]
-"Homepage" = "https://github.com/lucapajola/PhantomText"
-"Bug Reports" = "https://github.com/lucapajola/PhantomText/issues"
-"Source" = "https://github.com/lucapajola/PhantomText"
+Homepage = "https://github.com/pajola/PhantomText"
+"Bug Reports" = "https://github.com/pajola/PhantomText/issues"
+Source = "https://github.com/pajola/PhantomText"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["phantomtext*"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/phantomtext"]
 
-[tool.setuptools.package-data]
-phantomtext = ["fonts/*.ttf", "fonts/*.pkl"]
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+# Ruff owns Python source, not prose. Don't reformat code blocks inside Markdown
+# docs (e.g. README examples, some of which target the pre-0.2 API being redesigned).
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "C4"]
+# E501 (line-too-long) is deferred: the remaining long lines are in legacy
+# modules that get reflowed during their Season-1 rewrites. Re-enable then.
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B", "E501", "F401"]
+
+[tool.mypy]
+python_version = "3.9"
+files = ["src/phantomtext"]
+ignore_missing_imports = true
+# Kept lenient for now; tightened as the code is typed in Season 1.
+disallow_untyped_defs = false
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-q"
