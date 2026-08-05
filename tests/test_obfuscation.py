@@ -34,10 +34,21 @@ def test_zero_width_heavy_modality():
 
 def test_homoglyph_offline_roundtrip():
     atk = HomoglyphText(file_format="html")
-    obfuscated = atk.apply("cameo")  # a, e, o are in the fake map
-    assert obfuscated != "cameo"
+    original = "ACEHI"  # all present in the vendored UTS#39 table
+    obfuscated = atk.apply(original)
+    assert obfuscated != original
+    assert all(ord(c) > 127 for c in obfuscated)  # replaced with non-ASCII look-alikes
     assert atk.check(obfuscated) is True
-    assert atk.sanitize(obfuscated) == "cameo"
+    assert atk.check(original) is False  # plain ASCII is not flagged
+    assert atk.sanitize(obfuscated) == original
+
+
+def test_homoglyph_table_is_offline_and_cached():
+    from phantomtext.obfuscation.homoglyph_text import _load_homoglyph_table
+
+    table = _load_homoglyph_table()
+    assert table["A"] == ["Α"]  # Greek capital alpha
+    assert _load_homoglyph_table() is table  # cached (same object)
 
 
 def test_content_obfuscator_removes_target():

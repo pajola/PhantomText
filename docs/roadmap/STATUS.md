@@ -15,7 +15,7 @@ Columns: **str** = raw Unicode string · then file formats · **Detect** = scann
 | Technique | str | txt | html | docx | pdf | Detect | Sanitize |
 |-----------|:---:|:---:|:----:|:----:|:---:|:------:|:--------:|
 | zero-width characters | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
-| homoglyph characters  | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡¹ | 🟡 |
+| homoglyph characters  | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
 | diacritical marks     | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
 | bidi / reordering     | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
 | unicode tags block    | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
@@ -33,12 +33,13 @@ Columns: **str** = raw Unicode string · then file formats · **Detect** = scann
 | metadata       | — | — | ☐ | ☐ | ☐ | ☐ | ☐ |
 | font poisoning | — | — | ☐ | ☐ | ☐ | ☐ | ☐ |
 
-¹ homoglyph detection currently requires a **runtime network fetch** to unicode.org — to be removed (ARC-102).
+_(ARC-102) The homoglyph table is vendored offline — the library makes no runtime network calls anywhere._
 
 ## Cross-cutting capabilities
 | Capability | Status | Notes |
 |-----------|:------:|-------|
 | Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
+| Fully offline (no runtime network) | ✅ | ARC-102 — vendored UTS#39 table; `requests` dropped |
 | String-first API | ☐ | ARC-103 |
 | Batch / parallel processing | ☐ | ARC-106 |
 | SecurityPolicy / profiles | ☐ | ARC-201 |

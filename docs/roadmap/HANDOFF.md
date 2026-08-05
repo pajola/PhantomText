@@ -6,15 +6,16 @@ It is the handoff between sessions.
 ---
 
 ## Current position
-- **Season:** 1 — Core API Consolidation (**Season 0 complete**)
-- **Active arc:** ARC-101 — Unify `AttackBase` (done, awaiting review)
-- **Branch:** `arc/101-unify-attackbase` (off `main`)
+- **Season:** 1 — Core API Consolidation
+- **Active arc:** ARC-102 — Vendor homoglyph data offline (done, awaiting review)
+- **Branch:** `arc/102-vendor-homoglyphs` (off `main`)
 - **Next release target:** 0.2.0 (end of Season 1)
 
 ## Git state
-- `main` @ `5a29e71` — Season 0 fully merged (PRs #1, #3, #4, #5). Auth via gh (Luca's classic PAT).
-- `arc/101-unify-attackbase` — `core/base.py` hierarchy + 8 techniques migrated (about to commit & PR).
-- Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: 20 passed, 2 xfailed; ruff/mypy clean.
+- `main` @ `bbf32f0` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) merged. Auth via gh (Luca's classic PAT).
+- `arc/102-vendor-homoglyphs` — vendored data + refresh tool; dropped `requests` (about to commit & PR).
+- **The library is now fully offline** (no runtime network anywhere).
+- Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: 21 passed, 2 xfailed; ruff/mypy clean.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout/hygiene) written, merged to `main` (PRs #1, #3).
@@ -25,17 +26,18 @@ It is the handoff between sessions.
   CI workflow; ruff format+autofix baseline (+5 hand fixes); requires-python >=3.9. ADR-006 (Hatchling). Merged (#4).
 - 2026-08-04 — ARC-004: rewrote tests as offline/deterministic pytest; 5 legacy test files removed; xfail for
   the two stubs; CI pytest matrix + non-blocking mypy. E1–E5 accepted. Merged (#5) → **Season 0 complete**.
-- 2026-08-04 — ARC-101: new `core/base.py` (`Attack`/`ObfuscationAttack`/`InjectionAttack`); migrated all 8
-  techniques; deleted both old `attack_base*.py`; `sanitized`→`sanitize` (aliased); `name`/`family` metadata;
-  honest injection `check()` stubs. ADR-007 accepted. 20 passed, 2 xfailed.
+- 2026-08-04 — ARC-101: new `core/base.py`; migrated all 8 techniques; `sanitized`→`sanitize` (aliased);
+  `name`/`family` metadata; honest injection `check()` stubs. ADR-007. Merged (#6).
+- 2026-08-05 — ARC-102: vendored `intentional.txt` in `phantomtext/data/` (offline, cached parser); removed the
+  runtime `requests.get`; **dropped `requests`**; added `python -m phantomtext.data.refresh_homoglyphs`;
+  simplified tests (no more network patch). ADR-008. 21 passed, 2 xfailed. Library now fully offline.
 
 ## Next steps
-1. Push `arc/101-unify-attackbase`, open PR → `main`; maintainer reviews CI + merges.
-2. **ARC-102 — vendor homoglyph data offline**: ship the Unicode confusables table in-package, remove the
-   runtime `requests.get` in `HomoglyphText._load_homoglyphs`, drop the `requests` dependency, add a refresh
-   tool. (Then the conftest homoglyph patch can be simplified/removed.) After that: ARC-103 (string-first public
-   API + deprecation shims for `ContentObfuscator`/`ContentInjector`/`FileScanner`), ARC-104 (formats incl. txt),
-   ARC-105 (fix RNG off-by-one, drop numpy), ARC-106 (batch/parallel). Season 1 closes with the 0.2.0 release.
+1. Push `arc/102-vendor-homoglyphs`, open PR → `main`; maintainer reviews CI + merges.
+2. **ARC-103 — string-first public API**: the central ADR-002 deliverable. Design `scan / obfuscate / inject /
+   sanitize` operating on `str`, with the file layer wrapping them; add deprecation shims for the 0.1 facades
+   (`ContentObfuscator`, `ContentInjector`, `FileScanner`). Then ARC-104 (formats incl. txt), ARC-105 (fix RNG
+   off-by-one + drop numpy), ARC-106 (batch/parallel). Season 1 closes with the 0.2.0 release.
 
 ## Open questions / awaiting maintainer
 - Review & merge ARC-004 PR (watch CI) → closes Season 0.

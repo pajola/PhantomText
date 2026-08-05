@@ -1,7 +1,38 @@
+import functools
+from importlib import resources
+
 import numpy as np
-import requests
 
 from ..core.base import ObfuscationAttack
+
+
+@functools.lru_cache(maxsize=1)
+def _load_homoglyph_table() -> dict[str, list[str]]:
+    """Parse the vendored Unicode UTS#39 confusables table (offline, cached once).
+
+    Maps each base character to the look-alike glyph(s) it can be replaced with,
+    e.g. ``{"A": ["Α"], "C": ["С"]}``. Multi-codepoint sequences are skipped.
+    """
+    text = resources.files("phantomtext.data").joinpath("intentional.txt").read_text("utf-8-sig")
+    mapping: dict[str, list[str]] = {}
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        data = line.split("#", 1)[0]
+        if ";" not in data:
+            continue
+        src_field, tgt_field = data.split(";", 1)
+        src_cps, tgt_cps = src_field.split(), tgt_field.split()
+        if len(src_cps) != 1 or len(tgt_cps) != 1:  # skip multi-codepoint sequences
+            continue
+        try:
+            base = chr(int(src_cps[0], 16))
+            glyph = chr(int(tgt_cps[0], 16))
+        except ValueError:
+            continue
+        mapping.setdefault(base, []).append(glyph)
+    return mapping
 
 
 class HomoglyphText(ObfuscationAttack):
@@ -21,30 +52,8 @@ class HomoglyphText(ObfuscationAttack):
         """
         super().__init__(modality, file_format)
 
-        # Retrieve Unicode intentional homoglyph characters
-        self.homoglyphs = self._load_homoglyphs()
-
-    def _load_homoglyphs(self):
-        """
-        Loads intentional homoglyph mappings from Unicode.
-
-        Returns:
-            dict: A dictionary mapping base characters to their homoglyphs.
-        """
-        intentionals = {}
-        int_resp = requests.get(
-            "https://www.unicode.org/Public/security/latest/intentional.txt", stream=True
-        )
-        for line in int_resp.iter_lines():
-            if len(line):
-                line = line.decode("utf-8-sig")
-                if line[0] != "#":
-                    line = line.replace("#*", "#")
-                    _, line = line.split("#", maxsplit=1)
-                    if line[3] not in intentionals:
-                        intentionals[line[3]] = []
-                    intentionals[line[3]].append(line[7])
-        return intentionals
+        # Load the vendored Unicode UTS#39 confusables table (offline, cached).
+        self.homoglyphs = _load_homoglyph_table()
 
     def apply(self, input_text):
         """
