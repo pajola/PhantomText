@@ -1,63 +1,53 @@
+"""Deprecated 0.1 facade — kept as a shim over the string-first API (ADR-009 / H4).
+
+Prefer :func:`phantomtext.obfuscate`. This class is removed at 1.0.
+"""
+
+from __future__ import annotations
+
+import warnings
+
+from .api import obfuscate as _obfuscate
+
+_SUPPORTED_FORMATS = {"html", "pdf", "docx", "markdown"}
+
+
 class ContentObfuscator:
-    def obfuscate_content(self, content):
-        """
-        Obfuscates sensitive information in the provided content.
+    """Deprecated. Use :func:`phantomtext.obfuscate`."""
 
-        Args:
-            content (str): The content to obfuscate.
+    def __init__(self) -> None:
+        warnings.warn(
+            "ContentObfuscator is deprecated and will be removed in 1.0; "
+            "use phantomtext.obfuscate().",
+            DeprecationWarning,
+            stacklevel=2,
+        )
 
-        Returns:
-            str: The obfuscated content.
-        """
-        # Example implementation: Replace sensitive information with placeholders
-        obfuscated_content = content.replace("sensitive_info", "[REDACTED]")
-        return obfuscated_content
+    def obfuscate_content(self, content: str) -> str:
+        """Deprecated placeholder retained for source compatibility."""
+        warnings.warn(
+            "ContentObfuscator.obfuscate_content is deprecated and will be removed in 1.0.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return content.replace("sensitive_info", "[REDACTED]")
 
-    def obfuscate(self, x, y, obfuscation_technique, modality="default", file_format="html"):
-        """
-        Applies a custom obfuscation technique to the target context within the source string.
+    def obfuscate(
+        self,
+        x: str,
+        y: str,
+        obfuscation_technique: str,
+        modality: str = "default",
+        file_format: str = "html",
+    ) -> str:
+        """Deprecated. Delegates to :func:`phantomtext.obfuscate`.
 
-        Args:
-            x (str): The full source string.
-            y (str): The target context to obfuscate (must be contained in x).
-            obfuscation_technique (str): The technique to use for obfuscation (e.g., "mask", "hash", "zero_width").
-            modality (str): The execution mode for the obfuscation (default is "default").
-            file_format (str): The format of the file (must be one of "html", "pdf", "docx", "markdown").
-
-        Returns:
-            str: The source string with the target context obfuscated.
+        ``file_format`` is validated for backwards compatibility but no longer affects the
+        (pure string) transform. The old camelCase ``obfuscation_technique`` values are
+        translated to canonical names by the new API (with their own deprecation warning).
         """
         if y not in x:
             raise ValueError("The target context (y) must be contained in the source string (x).")
-
-        if file_format not in ["html", "pdf", "docx", "markdown"]:
+        if file_format not in _SUPPORTED_FORMATS:
             raise ValueError(f"Unsupported file format: {file_format}")
-
-        if obfuscation_technique == "zeroWidthCharacter":
-            from .obfuscation.zero_width_text import ZeroWidthText
-
-            obfuscator = ZeroWidthText(
-                modality=modality, file_format=file_format
-            )  # Use ZeroWidthText to embed the target context
-        elif obfuscation_technique == "homoglyph":
-            from .obfuscation.homoglyph_text import HomoglyphText
-
-            obfuscator = HomoglyphText(modality=modality, file_format=file_format)
-        elif obfuscation_technique == "diacritical":
-            from .obfuscation.diacritical_marks import DiacriticalMarks
-
-            obfuscator = DiacriticalMarks(modality=modality, file_format=file_format)
-        elif obfuscation_technique == "bidi":
-            from .obfuscation.reordering_char import BidiText
-
-            obfuscator = BidiText(modality=modality, file_format=file_format)
-        else:
-            raise ValueError(f"Unsupported obfuscation technique: {obfuscation_technique}")
-
-        # apply the obfuscation
-        y_obf = obfuscator.apply(y)
-
-        # replace the target context with the obfuscated value
-        result = x.replace(y, y_obf)
-
-        return result
+        return _obfuscate(x, y, technique=obfuscation_technique, modality=modality)

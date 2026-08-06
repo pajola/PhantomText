@@ -7,20 +7,22 @@ It is the handoff between sessions.
 
 ## Current position
 - **Season:** 1 — Core API Consolidation
-- **Active arc:** ARC-103 — String-first public API (**planned; decisions H1–H8 awaiting sign-off**)
-- **Branch:** none yet (create `arc/103-string-first-api` off `main` after H1–H8 are approved)
+- **Active arc:** ARC-103 — String-first public API (**implemented on `arc/103-string-first-api`; awaiting push + PR review**)
+- **Branch:** `arc/103-string-first-api` (off `main`); committed locally, not yet pushed.
 - **Next release target:** 0.2.0 (end of Season 1)
 
 ## >>> START HERE (next session)
-1. Read `docs/roadmap/arcs/ARC-103-string-first-api.md` — the ARC-103 plan with decision table **H1–H8**.
-2. Present H1–H8 to Luca, get sign-off (human-in-the-middle), write **ADR-009** for the API shape.
-3. Then branch `arc/103-string-first-api` off `main` and implement. `uv sync --extra dev`;
-   verify with `uv run --no-sync pytest` / `ruff check .` / `mypy src/phantomtext`.
+1. **Push `arc/103-string-first-api` and open a PR → `main`** (maintainer decision; not pushed yet). Watch CI, merge.
+2. Then **ARC-104 — first-class txt + format dedupe**: unify the per-format handlers, make `.txt` a first-class
+   format across every op (ARC-103 only wired `.txt`/`.md` into the file load/save layer). Write the ARC-104 plan
+   + decision table, get sign-off, then implement.
+3. After that: ARC-105 (fix zero-width RNG off-by-one + drop numpy), ARC-106 (batch/parallel). Season 1 → 0.2.0.
 
 ## Git state
 - `main` @ `a6efa20` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. Auth via gh (classic PAT).
+- **`arc/103-string-first-api`** branched off `ce46a1a`; ARC-103 committed locally (see Done). Not pushed.
 - Working tree clean; **library is fully offline** (no runtime network anywhere).
-- Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: 21 passed, 2 xfailed; ruff/mypy clean.
+- Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: **42 passed, 0 xfail**; ruff/format/mypy clean.
 - CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking). Repo also runs a Sourcery bot on PRs (not a gate).
 
 ## Done
@@ -37,16 +39,21 @@ It is the handoff between sessions.
 - 2026-08-05 — ARC-102: vendored `intentional.txt` in `phantomtext/data/` (offline, cached parser); removed the
   runtime `requests.get`; **dropped `requests`**; added `python -m phantomtext.data.refresh_homoglyphs`;
   simplified tests (no more network patch). ADR-008. 21 passed, 2 xfailed. Library now fully offline.
+- 2026-08-06 — ARC-103 (string-first public API). ADR-009 accepted (H1–H8; `Technique` enum built now).
+  New `core/report.py` (`Finding`/`ScanReport`), `core/registry.py` (`Technique` enum + name→class registry +
+  `register()` hook + deprecated `zeroWidthCharacter` alias), `api.py` (verbs `obfuscate/scan/sanitize/inject/
+  scan_file/sanitize_file`, registry-driven, `.txt`/`.md` wired). The four 0.1 facades are now `DeprecationWarning`
+  shims delegating to the new API (`FileSanitizer.sanitize_file` finally real). Tests: +`test_api.py`,
+  +`test_deprecation.py`, −`test_stubs_xfail.py` (both xfails flipped); **42 passed**, ruff/format/mypy clean.
 
 ## Next steps
-1. Push `arc/102-vendor-homoglyphs`, open PR → `main`; maintainer reviews CI + merges.
-2. **ARC-103 — string-first public API**: the central ADR-002 deliverable. Design `scan / obfuscate / inject /
-   sanitize` operating on `str`, with the file layer wrapping them; add deprecation shims for the 0.1 facades
-   (`ContentObfuscator`, `ContentInjector`, `FileScanner`). Then ARC-104 (formats incl. txt), ARC-105 (fix RNG
-   off-by-one + drop numpy), ARC-106 (batch/parallel). Season 1 closes with the 0.2.0 release.
+1. Push `arc/103-string-first-api`, open PR → `main`; maintainer reviews CI + merges.
+2. **ARC-104 — first-class txt + format dedupe**: unify per-format handlers; `.txt` first-class everywhere
+   (ARC-103 only wired it into load/save). Then ARC-105 (fix zero-width RNG off-by-one + drop numpy),
+   ARC-106 (batch/parallel). Season 1 closes with the 0.2.0 release.
 
 ## Open questions / awaiting maintainer
-- Review & merge ARC-004 PR (watch CI) → closes Season 0.
+- Push ARC-103 branch + open PR (outward-facing — awaiting the go-ahead).
 
 ## Key findings from the 0.1.1 audit (context for upcoming arcs)
 - Two duplicate `AttackBase` classes with incompatible signatures.

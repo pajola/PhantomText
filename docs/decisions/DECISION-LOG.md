@@ -13,3 +13,4 @@ Every meaningful decision is an Architecture Decision Record (ADR). This is the 
 | [006](ADR-006-build-backend.md) | Build backend: Hatchling | Accepted | 2026-08-04 |
 | [007](ADR-007-attack-base-hierarchy.md) | Attack base-class hierarchy | Accepted | 2026-08-04 |
 | [008](ADR-008-offline-homoglyph-data.md) | Offline homoglyph data | Accepted | 2026-08-05 |
+| [009](ADR-009-string-first-api.md) | String-first public API (verbs, registry, report) | Accepted | 2026-08-06 |

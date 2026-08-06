@@ -2,7 +2,7 @@
 
 - **Season:** 1 — Core API Consolidation
 - **Branch:** `arc/103-string-first-api` (off `main`)
-- **Status:** ☐ planned — **decisions H1–H8 awaiting maintainer sign-off** (do not implement yet)
+- **Status:** ✅ implemented (2026-08-06) — H1–H8 signed off, `Technique` enum built now; ADR-009 accepted
 - **Depends on:** ARC-101 (unified base), ARC-102 (offline data)
 
 ## Goal
@@ -39,10 +39,20 @@ pt.scan_file(path); pt.sanitize_file(path, output_path=...)                 # fi
   dedupe (ARC-104), RNG fix + drop numpy (ARC-105), batch/parallel (ARC-106).
 
 ## Acceptance criteria (once approved)
-- [ ] Top-level string-first verbs implemented + typed; registry drives dispatch
-- [ ] Deprecation shims keep 0.1 imports working (with warnings) — add tests
-- [ ] `FileSanitizer`/`sanitize` actually removes obfuscation (flip the ARC-004 xfail)
-- [ ] Suite green offline + ruff/mypy clean; ADR for the API shape (ADR-009)
+- [x] Top-level string-first verbs implemented + typed; registry drives dispatch
+- [x] Deprecation shims keep 0.1 imports working (with warnings) — add tests
+- [x] `FileSanitizer`/`sanitize` actually removes obfuscation (flip the ARC-004 xfail)
+- [x] Suite green offline + ruff/mypy clean; ADR for the API shape (ADR-009)
 
 ## Session log
 - 2026-08-05 — Plan drafted during ARC-102 handoff; awaiting sign-off on H1–H8 before implementation.
+- 2026-08-06 — H1–H8 signed off (H3 enum built now). ADR-009 accepted. Implemented on `arc/103-string-first-api`:
+  - `core/report.py` (`Finding`/`ScanReport`), `core/registry.py` (`Technique` enum + name→class registry,
+    `register()` hook, deprecated `zeroWidthCharacter` alias), `api.py` (verbs `obfuscate/scan/sanitize/inject/
+    scan_file/sanitize_file`; registry-driven dispatch; `.txt`/`.md` wired into the file layer).
+  - `__init__.py` re-exports the verbs + `Technique`/`ScanReport`/`Finding`; the four 0.1 facades
+    (`ContentObfuscator`/`ContentInjector`/`FileScanner`/`FileSanitizer`) rewritten as `DeprecationWarning`
+    shims delegating to the new API (old return shapes preserved). `FileSanitizer.sanitize_file` now real.
+  - Tests: new `test_api.py` + `test_deprecation.py`; deleted `test_stubs_xfail.py` (both xfails flipped);
+    updated `test_obfuscation.py`/`test_scanning.py` for the deprecation warnings. **42 passed, 0 xfail**;
+    ruff + `ruff format` + mypy all clean; fully offline.

@@ -1,93 +1,66 @@
+"""Deprecated 0.1 facade — kept as a shim over the string-first API (ADR-009 / H4).
+
+Prefer :func:`phantomtext.scan_file`, which returns a structured ``ScanReport``. This
+class preserves the old dict-shaped report for backwards compatibility and is removed at 1.0.
+"""
+
+from __future__ import annotations
+
 import os
+import warnings
+from typing import Any
 
 from tqdm import tqdm
 
-from phantomtext.obfuscation.diacritical_marks import DiacriticalMarks
-from phantomtext.obfuscation.homoglyph_text import HomoglyphText
-from phantomtext.obfuscation.reordering_char import BidiText
-from phantomtext.obfuscation.zero_width_text import ZeroWidthText
-from phantomtext.text_loader import TextLoader
+from .api import scan_file as _scan_file
+
+#: Canonical technique name -> the human label used in the legacy dict report.
+_LABELS = {
+    "diacritical": "Diacritical marks detected.",
+    "homoglyph": "Homoglyph characters detected.",
+    "bidi": "Bidi characters detected.",
+    "zero_width": "Zero-width characters detected.",
+}
 
 
 class FileScanner:
-    def __init__(self):
-        self.text_loader = TextLoader()
-        self.bidi_checker = BidiText()
-        self.diacritical_checker = DiacriticalMarks()
-        self.zero_width_checker = ZeroWidthText()
-        self.homoglyph_checker = HomoglyphText()
+    """Deprecated. Use :func:`phantomtext.scan_file`."""
 
-    def scan_file(self, file_path):
-        """
-        Scans the specified file for malicious content or vulnerabilities.
+    def __init__(self) -> None:
+        warnings.warn(
+            "FileScanner is deprecated and will be removed in 1.0; use phantomtext.scan_file().",
+            DeprecationWarning,
+            stacklevel=2,
+        )
 
-        Args:
-            file_path (str): Path to the file to be scanned.
-
-        Returns:
-            dict: A report indicating the presence of any malicious content or vulnerabilities.
-        """
-        report = {"file_path": file_path, "malicious_content_found": False, "vulnerabilities": []}
-
+    def scan_file(self, file_path: str) -> dict[str, Any]:
+        """Scan a file, returning the legacy dict report (delegates to the new API)."""
+        report: dict[str, Any] = {
+            "file_path": file_path,
+            "malicious_content_found": False,
+            "vulnerabilities": [],
+        }
         try:
-            # Load the text from the file
-            text = self.text_loader.load_text(file_path)
-
-            # Check for diacritics
-            if self.diacritical_checker.check(text):
+            result = _scan_file(file_path)
+            for finding in result.findings:
                 report["malicious_content_found"] = True
-                report["vulnerabilities"].append("Diacritical marks detected.")
-
-            # Check for homoglyphs characters
-            if self.homoglyph_checker.check(text):
-                report["malicious_content_found"] = True
-                report["vulnerabilities"].append("Homoglyph characters detected.")
-
-            # Check for Bidi characters
-            if self.bidi_checker.check(text):
-                report["malicious_content_found"] = True
-                report["vulnerabilities"].append("Bidi characters detected.")
-
-            # Check for zero-width characters
-            if self.zero_width_checker.check(text):
-                report["malicious_content_found"] = True
-                report["vulnerabilities"].append("Zero-width characters detected.")
-
-        except Exception as e:
+                report["vulnerabilities"].append(
+                    _LABELS.get(finding.technique, f"{finding.technique} detected.")
+                )
+        except Exception as e:  # noqa: BLE001 (legacy behaviour: report errors, don't raise)
             report["vulnerabilities"].append(f"Error scanning file: {str(e)}")
-
         return report
 
-    def scan_dir(self, dir_path):
-        """
-        Scans all files in the specified directory for malicious content or vulnerabilities.
-
-        Args:
-            dir_path (str): Path to the directory to be scanned.
-
-        Returns:
-            list: A list of reports for each file scanned.
-        """
+    def scan_dir(self, dir_path: str) -> list[dict[str, Any]]:
+        """Scan every file under ``dir_path`` and print a summary."""
         reports = []
-
-        # Iterate over all files in the directory using tqdm for a progress bar
         for root, _, files in os.walk(dir_path):
             for file_name in tqdm(files, desc="Scanning files", unit="file"):
-                file_path = os.path.join(root, file_name)
-                report = self.scan_file(file_path)
-                reports.append(report)
-
-        # Generate a visually appealing summary report
+                reports.append(self.scan_file(os.path.join(root, file_name)))
         self._generate_summary_report(reports)
         return reports
 
-    def _generate_summary_report(self, reports):
-        """
-        Generates a visually appealing summary report with emojis.
-
-        Args:
-            reports (list): List of individual file scan reports.
-        """
+    def _generate_summary_report(self, reports: list[dict[str, Any]]) -> None:
         print("\n📄 Scan Summary Report")
         print("=" * 50)
         for report in reports:

@@ -52,10 +52,17 @@ def test_homoglyph_table_is_offline_and_cached():
 
 
 def test_content_obfuscator_removes_target():
-    obfuscator = ContentObfuscator()
+    # Deprecated 0.1 facade — still works, now over the string-first API.
+    with pytest.warns(DeprecationWarning):
+        obfuscator = ContentObfuscator()
     content = "Contact me at secret@example.com now."
     target = "secret@example.com"
-    for technique in ["zeroWidthCharacter", "diacritical", "bidi", "homoglyph"]:
+    # Old camelCase name is accepted but deprecated; canonical names are not.
+    with pytest.warns(DeprecationWarning):
+        assert target not in obfuscator.obfuscate(
+            content, target, obfuscation_technique="zeroWidthCharacter", file_format="html"
+        )
+    for technique in ["diacritical", "bidi", "homoglyph"]:
         out = obfuscator.obfuscate(
             content, target, obfuscation_technique=technique, file_format="html"
         )
@@ -63,7 +70,8 @@ def test_content_obfuscator_removes_target():
 
 
 def test_content_obfuscator_validation():
-    obfuscator = ContentObfuscator()
+    with pytest.warns(DeprecationWarning):
+        obfuscator = ContentObfuscator()
     with pytest.raises(ValueError):  # target not contained in source
         obfuscator.obfuscate("abc", "xyz", obfuscation_technique="bidi", file_format="html")
     with pytest.raises(ValueError):  # unsupported file format

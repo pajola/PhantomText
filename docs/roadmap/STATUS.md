@@ -5,7 +5,7 @@ Ideally this table becomes auto-generated from a capability registry (Season 1).
 
 **Cell legend:** ✅ implemented & tested · 🟡 works but unverified/partial · 🚧 stub/placeholder · ☐ planned · — N/A
 
-_Last updated: 2026-08-03 (baseline from `phantomtext` 0.1.1 — pre-rebuild)._
+_Last updated: 2026-08-06 (ARC-103 — string-first public API)._
 
 ## Attacks × formats
 
@@ -14,10 +14,10 @@ Columns: **str** = raw Unicode string · then file formats · **Detect** = scann
 ### Obfuscation
 | Technique | str | txt | html | docx | pdf | Detect | Sanitize |
 |-----------|:---:|:---:|:----:|:----:|:---:|:------:|:--------:|
-| zero-width characters | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
-| homoglyph characters  | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
-| diacritical marks     | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
-| bidi / reordering     | 🟡 | ☐ | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
+| zero-width characters | ✅ | 🟡 | 🟡 | 🟡 | 🟡 | ✅ | ✅ |
+| homoglyph characters  | ✅ | 🟡 | 🟡 | 🟡 | 🟡 | ✅ | ✅ |
+| diacritical marks     | ✅ | 🟡 | 🟡 | 🟡 | 🟡 | ✅ | ✅ |
+| bidi / reordering     | ✅ | 🟡 | 🟡 | 🟡 | 🟡 | ✅ | ✅ |
 | unicode tags block    | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | variation selectors   | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | whitespace substitution | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
@@ -40,7 +40,7 @@ _(ARC-102) The homoglyph table is vendored offline — the library makes no runt
 |-----------|:------:|-------|
 | Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
 | Fully offline (no runtime network) | ✅ | ARC-102 — vendored UTS#39 table; `requests` dropped |
-| String-first API | ☐ | ARC-103 |
+| String-first API | ✅ | ARC-103 — `obfuscate/scan/sanitize/inject/scan_file/sanitize_file` + registry, `Technique`, `ScanReport` |
 | Batch / parallel processing | ☐ | ARC-106 |
 | SecurityPolicy / profiles | ☐ | ARC-201 |
 | Structured (JSON) reports | ☐ | ARC-204 |
@@ -50,4 +50,4 @@ _(ARC-102) The homoglyph table is vendored offline — the library makes no runt
 | Docs site | ☐ | ARC-303 |
 | Build/packaging (Hatchling, PEP 621) | ✅ | ARC-003 |
 | CI (ruff + build-import + pytest matrix + mypy) | ✅ | ARC-003/004 (mypy non-blocking) |
-| Offline deterministic test suite | ✅ | ARC-004 — 18 passed, 2 xfailed, no network |
+| Offline deterministic test suite | ✅ | ARC-004/103 — 42 passed, no network (ARC-103 flipped the 2 xfails) |
