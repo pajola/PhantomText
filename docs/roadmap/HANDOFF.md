@@ -7,15 +7,21 @@ It is the handoff between sessions.
 
 ## Current position
 - **Season:** 1 — Core API Consolidation
-- **Active arc:** ARC-102 — Vendor homoglyph data offline (done, awaiting review)
-- **Branch:** `arc/102-vendor-homoglyphs` (off `main`)
+- **Active arc:** ARC-103 — String-first public API (**planned; decisions H1–H8 awaiting sign-off**)
+- **Branch:** none yet (create `arc/103-string-first-api` off `main` after H1–H8 are approved)
 - **Next release target:** 0.2.0 (end of Season 1)
 
+## >>> START HERE (next session)
+1. Read `docs/roadmap/arcs/ARC-103-string-first-api.md` — the ARC-103 plan with decision table **H1–H8**.
+2. Present H1–H8 to Luca, get sign-off (human-in-the-middle), write **ADR-009** for the API shape.
+3. Then branch `arc/103-string-first-api` off `main` and implement. `uv sync --extra dev`;
+   verify with `uv run --no-sync pytest` / `ruff check .` / `mypy src/phantomtext`.
+
 ## Git state
-- `main` @ `bbf32f0` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) merged. Auth via gh (Luca's classic PAT).
-- `arc/102-vendor-homoglyphs` — vendored data + refresh tool; dropped `requests` (about to commit & PR).
-- **The library is now fully offline** (no runtime network anywhere).
+- `main` @ `a6efa20` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. Auth via gh (classic PAT).
+- Working tree clean; **library is fully offline** (no runtime network anywhere).
 - Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: 21 passed, 2 xfailed; ruff/mypy clean.
+- CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking). Repo also runs a Sourcery bot on PRs (not a gate).
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout/hygiene) written, merged to `main` (PRs #1, #3).
