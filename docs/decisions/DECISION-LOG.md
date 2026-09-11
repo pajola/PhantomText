@@ -19,6 +19,7 @@ One-way doors. Every one is an Architecture Decision Record requiring maintainer
 | [010](ADR-010-tiered-decisions.md) | Tiered decisions, unblocked handoffs, review-queue cap | Accepted | 2026-09-10 |
 | [011](ADR-011-detection-first-ground-truth.md) | Detection-first roadmap; no detector without ground truth | Accepted | 2026-09-10 |
 | [012](ADR-012-clean-room-core.md) | Clean-room rewrite of the core | Accepted | 2026-09-10 |
+| [013](ADR-013-family-id-naming-scheme.md) | Taxonomy family ID naming scheme (`PT.<CLASS>.<FAMILY>`) | Accepted | 2026-09-11 |
 
 ## Part 2 — Type-2 log (two-way doors)
 
@@ -29,3 +30,8 @@ Format: `YYYY-MM-DD — [T2] <decision> — <one-line rationale>`
 
 - 2026-09-10 — [T2] Season numbering continues from 2 rather than restarting after the re-cut — keeps the ADR trail and PR history legible against the roadmap.
 - 2026-09-10 — [T2] The 0.1 audit bug list is carried in HANDOFF as prospective corpus samples rather than as an open bug list — under ADR-012 the code they describe will not exist.
+- 2026-09-11 — [T2] ARC-201 taxonomy is a hand-written Markdown doc (`docs/spec/TAXONOMY.md`) with a fixed per-entry field structure, not YAML + generated docs — the arc is explicitly no-code/no-detectors, and a consistently-structured Markdown entry converts trivially to YAML later if ARC-301's registry needs it.
+- 2026-09-11 — [T2] Default severity scale is 4-level (Critical/High/Medium/Low) — maps cleanly onto SARIF's error/warning/note bucketing (plus none for suppressed) and gives ARC-304's per-family policy overrides enough granularity across dozens of families without overloading a 3-level scale.
+- 2026-09-11 — [T2] Mixed-script restriction levels follow UTS #39 verbatim (ASCII-Only … Unrestricted) rather than a PhantomText subset — keeps the taxonomy citation-grounded; any user-facing simplification belongs in ARC-304's policy layer, not in the taxonomy definitions.
+- 2026-09-11 — [T2] `PT.DOC.*` initially drafted as 16 family IDs against the arc's 8 scope bullets (vs. the ~1:1 mapping used for `PT.INVIS.*`/`PT.DECEIVE.*`) — several bullets (HTML hidden-node techniques, metadata channels) bundle mechanisms with materially different legitimacy and severity profiles that a single family would flatten. Flagged prominently in `TAXONOMY.md`'s scope note for maintainer veto at PR review, per ADR-010's safety net. **Superseded same day, see next line.**
+- 2026-09-11 — [T2] `PT.DOC.*` collapsed back to 8 IDs, 1:1 with the arc's scope bullets, on maintainer review of PR #10 — the flagged expansion above was vetoed. Each collapsed family still documents its distinct sub-mechanisms and their differing legitimate-use/severity profiles in prose; the collapse changes ID count, not analysis depth. Establishes a working preference toward fewer, coarser family IDs unless corpus/detector evidence demands a split — worth weighing against the two still-open candidate splits inside `PT.INVIS.*` noted in `TAXONOMY.md`'s "Open items" section.

@@ -40,14 +40,16 @@ _(ARC-102) The homoglyph table is vendored offline — the library makes no runt
 |-----------|:------:|-------|
 | Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
 | Fully offline (no runtime network) | ✅ | ARC-102 — vendored UTS#39 table; `requests` dropped |
-| String-first API | ☐ | ARC-103 |
-| Batch / parallel processing | ☐ | ARC-106 |
-| SecurityPolicy / profiles | ☐ | ARC-201 |
-| Structured (JSON) reports | ☐ | ARC-204 |
-| Attack-example dataset | ☐ | ARC-205 |
-| CLI | ☐ | ARC-301 |
-| Plugin API | ☐ | ARC-302 |
-| Docs site | ☐ | ARC-303 |
+| Threat taxonomy (`docs/spec/TAXONOMY.md`) | 🟡 | ARC-201 — 8 `PT.INVIS.*` + 5 `PT.DECEIVE.*` + 8 `PT.DOC.*` families (21 total) with legitimate-use notes and citations; not yet accepted (PR #10 open, updated per maintainer review) |
+| Finding schema & severity model | ☐ | ARC-202 (Type-1: serialized format) |
+| Ground-truth corpus | ☐ | ARC-203 |
+| Evaluation harness (precision/recall) | ☐ | ARC-204 |
+| Core detection registry | ☐ | ARC-301 |
+| String-first API | ⊘ | superseded (ADR-009); string-first-ness itself carried forward into ARC-301's core architecture |
+| SecurityPolicy / profiles | ☐ | ARC-304 |
+| Batch / parallel processing | ☐ | ARC-602 |
+| CLI | ☐ | ARC-601 |
+| Docs site | ☐ | ARC-603 |
 | Build/packaging (Hatchling, PEP 621) | ✅ | ARC-003 |
 | CI (ruff + build-import + pytest matrix + mypy) | ✅ | ARC-003/004 (mypy non-blocking) |
-| Offline deterministic test suite | ✅ | ARC-004 — 18 passed, 2 xfailed, no network |
+| Offline deterministic test suite | ✅ | ARC-004 — 21 passed, 2 xfailed, no network |

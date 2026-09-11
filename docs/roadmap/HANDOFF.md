@@ -10,27 +10,39 @@ is right — correct this file first, say so, then continue.
 
 ## Current position
 - **Season:** 2 — Ground Truth & the Detection Spec
-- **Active arc:** ARC-201 — Threat taxonomy (**not started**)
-- **Branch:** none yet — create `arc/201-threat-taxonomy` off `main`
+- **Active arc:** ARC-201 — Threat taxonomy (**PR #10 open, awaiting merge**)
+- **Branch:** `arc/201-threat-taxonomy` (pushed to `origin`)
 - **Next release target:** 0.2.0 (end of Season 3)
-- **Review queue:** empty ✅ (cap is 1)
+- **Review queue:** 1/1 — PR #10, at cap
 
 ## >>> START HERE (next session)
-This task needs **no maintainer action to begin**. Start it unattended.
+The review queue is at cap. **Do not open a new arc.** The only unblocked task is making PR #10's
+review/merge cheap.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green.
-2. Read `docs/roadmap/arcs/ARC-201-threat-taxonomy.md`.
-3. Branch `arc/201-threat-taxonomy` off `main`.
-4. Draft `docs/spec/TAXONOMY.md`. Research is the bulk of this arc — use the `unicode-analyst` subagent for
-   the Unicode semantics and, above all, for the legitimate-use notes.
-5. The only Type-1 gate in this arc is the **family ID naming scheme** (IDs land in user config files and CI
-   baselines, so they are expensive to change). Everything else here is Type-2 — decide and log it.
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is unchanged and `arc/201-threat-taxonomy`
+   still applies cleanly on top of it.
+2. Check `gh pr view 10` for maintainer comments since the last update. All acceptance criteria are
+   now met (see the ARC-201 arc file) — the one open question (`PT.DOC.*` family-ID granularity) was
+   reviewed and resolved: collapsed from 16 to 8 IDs, 1:1 with the arc's scope bullets.
+3. If the maintainer has approved, merge with `gh pr merge 10 --squash --delete-branch`, then update
+   `ROADMAP.md` (☑), `STATUS.md`, and this file to point at ARC-202 as the next unblocked task.
+4. If there are new comments, address them the same way the `PT.DOC.*` collapse was handled: edit,
+   commit, push to the same branch (PR updates in place) — do not open a second PR.
 
-## Git state *(verified 2026-09-10)*
-- `main` @ `ce46a1a` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. No other remote branches.
-- Working tree clean. Library is fully offline (no runtime network anywhere).
-- Suite: 21 passed, 2 xfailed. ruff/mypy clean. CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking).
-- Tag `v0.1.1` is the AISec'25 paper artifact and stays put.
+Remaining open items, none blocking, are recorded in `docs/spec/TAXONOMY.md`'s own "Open items
+carried forward" section: two candidate `PT.INVIS.*` ID splits deferred to the ARC-202 schema
+freeze (now leaning toward *not* splitting, given the `PT.DOC.*` precedent), an OCR-engine
+runtime-dependency flag for ARC-405, and two format details needing verification.
+
+## Git state *(verified 2026-09-11)*
+- `main` @ `3da5bb2` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut, PR #9
+  (#9, `docs: re-cut project governance and roadmap (ADR-009..012)`) merged. Working tree clean.
+- `arc/201-threat-taxonomy` pushed to origin, PR #10 open (`docs: threat taxonomy spec (ARC-201)`).
+  Docs-only arc — no `src/` changes, so gates are unchanged from `main`: 21 passed, 2 xfailed;
+  ruff/mypy clean.
+- `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
+- Stale remote branch `origin/arc/200-project-recut` remains after PR #9 merged; safe to delete, not urgent.
+- Library is fully offline (no runtime network anywhere).
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
@@ -43,13 +55,17 @@ This task needs **no maintainer action to begin**. Start it unattended.
   (ADR-009). Season 1 closed early: ARC-101/102 delivered, ARC-103–106 superseded.
 
 ## Next steps
-1. **ARC-201 — Threat taxonomy** (this session's target; unblocked).
-2. ARC-202 — Finding schema. Carries a Type-1 gate: the serialized schema.
+1. **Merge PR #10** (ARC-201) once satisfied — merge command is in the PR / arc-ship output:
+   `gh pr merge 10 --squash --delete-branch`.
+2. ARC-202 — Finding schema. Carries a Type-1 gate: the serialized schema. Do not start until PR #10
+   is merged (review-queue cap).
 3. ARC-203 — Ground-truth corpus, including the benign multilingual set.
 4. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
 
 ## Open questions / awaiting maintainer
-- None. The queue is deliberately empty. **Keep it that way** — see the review-queue cap in `CLAUDE.md`.
+- **PR #10 (ARC-201) awaiting merge decision.** The one substantive review point
+  (`PT.DOC.*` family-ID granularity) has already been resolved in-thread — collapsed 16→8. Merge
+  when satisfied.
 
 ## Post-mortem: why the project stalled 2026-08-05 → 2026-09-10
 Recorded here so a future session does not recreate the conditions.

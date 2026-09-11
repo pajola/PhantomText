@@ -46,7 +46,7 @@ being rewritten clean-room (ADR-012).
 grade any detector — *before* a detector exists. This is the season that makes every later claim measurable.
 **Exit:** a spec, a corpus, and a harness that emits precision/recall per family. Zero detectors written.
 
-- ☐ **ARC-201 — Threat taxonomy** — enumerate every family with a stable ID, a precise definition, canonical
+- ◐ **ARC-201 — Threat taxonomy** *(PR #10 open, revised per maintainer review 2026-09-11)* — enumerate every family with a stable ID, a precise definition, canonical
   examples, and a **legitimate-use note**. The invisible half: `Cf` format characters, zero-width
   (ZWSP/ZWNJ/ZWJ), bidi controls (LRO/RLO/PDF/isolates), the Tags block (U+E0000–E007F), variation selectors
   (U+FE00–FE0F, U+E0100+), whitespace substitution, soft hyphen. The deceiving half: UTS#39 confusables,
