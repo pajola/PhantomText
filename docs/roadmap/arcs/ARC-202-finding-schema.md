@@ -2,9 +2,9 @@
 
 - **Season:** 2 — Ground Truth & the Detection Spec
 - **Branch:** `arc/202-finding-schema` (off `main`)
-- **Status:** ☐ planned — **decisions D1–D4 await maintainer sign-off** (do not implement past them)
-- **Depends on:** ARC-201 (merged, #10 — supplies the family IDs this schema references). Unblocked
-  through drafting and the sign-off gate; implementation waits on D1–D4 approval.
+- **Status:** ☐ not started — D1–D4 approved as recommended ([ADR-014](../../decisions/ADR-014-finding-schema.md)); implementation not yet started
+- **Depends on:** ARC-201 (merged, #10 — supplies the family IDs this schema references). Fully
+  unblocked — branch and implement.
 
 ## Goal
 
@@ -78,7 +78,9 @@ follow-up arc rather than adding a fifth row here.
 - [ ] `pytest` green offline & deterministic; `ruff check`/`ruff format --check`/`mypy src/phantomtext` clean
 - [ ] `STATUS.md` updated — "Finding schema" row flips from ☐ to ✅
 - [ ] `HANDOFF.md` updated, pointing at ARC-203 as the next unblocked task
-- [ ] Type-2 decisions (D5–D7 and any made during implementation) logged in `DECISION-LOG.md`
+- [x] Type-2 decisions D5–D7 logged in `DECISION-LOG.md`; any made during implementation to be added
 
 ## Session log
-- *(empty — arc not started; this file drafted via `/arc-plan` on 2026-09-11)*
+- **2026-09-11** — Arc file drafted via `/arc-plan`. D5–D7 (Type-2) decided and logged. D1–D4
+  (Type-1) proposed via `/decide` and approved as recommended — see
+  [ADR-014](../../decisions/ADR-014-finding-schema.md). Implementation not yet started.

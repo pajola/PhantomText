@@ -20,6 +20,7 @@ One-way doors. Every one is an Architecture Decision Record requiring maintainer
 | [011](ADR-011-detection-first-ground-truth.md) | Detection-first roadmap; no detector without ground truth | Accepted | 2026-09-10 |
 | [012](ADR-012-clean-room-core.md) | Clean-room rewrite of the core | Accepted | 2026-09-10 |
 | [013](ADR-013-family-id-naming-scheme.md) | Taxonomy family ID naming scheme (`PT.<CLASS>.<FAMILY>`) | Accepted | 2026-09-11 |
+| [014](ADR-014-finding-schema.md) | `Finding`/`Report` schema, JSON shape, SARIF mapping, severity/confidence model | Accepted | 2026-09-11 |
 
 ## Part 2 — Type-2 log (two-way doors)
 
@@ -35,3 +36,6 @@ Format: `YYYY-MM-DD — [T2] <decision> — <one-line rationale>`
 - 2026-09-11 — [T2] Mixed-script restriction levels follow UTS #39 verbatim (ASCII-Only … Unrestricted) rather than a PhantomText subset — keeps the taxonomy citation-grounded; any user-facing simplification belongs in ARC-304's policy layer, not in the taxonomy definitions.
 - 2026-09-11 — [T2] `PT.DOC.*` initially drafted as 16 family IDs against the arc's 8 scope bullets (vs. the ~1:1 mapping used for `PT.INVIS.*`/`PT.DECEIVE.*`) — several bullets (HTML hidden-node techniques, metadata channels) bundle mechanisms with materially different legitimacy and severity profiles that a single family would flatten. Flagged prominently in `TAXONOMY.md`'s scope note for maintainer veto at PR review, per ADR-010's safety net. **Superseded same day, see next line.**
 - 2026-09-11 — [T2] `PT.DOC.*` collapsed back to 8 IDs, 1:1 with the arc's scope bullets, on maintainer review of PR #10 — the flagged expansion above was vetoed. Each collapsed family still documents its distinct sub-mechanisms and their differing legitimate-use/severity profiles in prose; the collapse changes ID count, not analysis depth. Establishes a working preference toward fewer, coarser family IDs unless corpus/detector evidence demands a split — worth weighing against the two still-open candidate splits inside `PT.INVIS.*` noted in `TAXONOMY.md`'s "Open items" section.
+- 2026-09-11 — [T2] ARC-202 (D5): `Finding`/`Report` live in `src/phantomtext/core/report.py`, alongside `core/base.py` from ARC-101 — internal module layout, freely revisable.
+- 2026-09-11 — [T2] ARC-202 (D6): implemented as a frozen, slotted stdlib `@dataclass`, not a validation library (e.g. pydantic) — adding one would itself be a Type-1 dependency change under CLAUDE.md; dataclasses are sufficient for a fixed field set with no runtime schema evolution.
+- 2026-09-11 — [T2] ARC-202 (D7): family-`id` field is validated by a regex format check (`PT\.[A-Z]+\.[A-Z_]+`), not a generated enum/literal from `TAXONOMY.md` — the taxonomy doc is hand-written Markdown (ARC-201 T2), not a machine-readable source an enum could be generated from yet; revisit if/when that changes.
