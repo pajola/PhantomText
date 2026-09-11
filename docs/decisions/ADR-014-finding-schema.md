@@ -41,10 +41,12 @@ whatever ships here.
   can threshold-sweep for a real precision/recall curve.
 
 Three Type-2 decisions were made alongside these and logged in `DECISION-LOG.md` rather than
-gated here: the schema lives in `src/phantomtext/core/report.py`; it's implemented as a frozen,
-slotted stdlib `dataclass` rather than adding a validation library (pydantic) as a new
-dependency; and the family-`id` field is validated by a regex format check, not a generated
-enum, since the taxonomy doc is hand-written Markdown, not a machine-readable source yet.
+gated here: the schema lives in `src/phantomtext/core/report.py`; it's implemented as a frozen
+stdlib `dataclass` rather than adding a validation library (pydantic) as a new dependency (a
+planned `slots=True` was dropped during implementation after it combined with `frozen=True` to
+hit a real CPython bug); and the family-`id` field is validated by a regex format check, not a
+generated enum, since the taxonomy doc is hand-written Markdown, not a machine-readable source
+yet.
 
 ## Consequences
 
