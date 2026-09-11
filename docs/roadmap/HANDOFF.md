@@ -26,11 +26,13 @@ This task needs **no maintainer action to begin**. Start it unattended.
 5. The only Type-1 gate in this arc is the **family ID naming scheme** (IDs land in user config files and CI
    baselines, so they are expensive to change). Everything else here is Type-2 — decide and log it.
 
-## Git state *(verified 2026-09-10)*
-- `main` @ `ce46a1a` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. No other remote branches.
-- Working tree clean. Library is fully offline (no runtime network anywhere).
-- Suite: 21 passed, 2 xfailed. ruff/mypy clean. CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking).
-- Tag `v0.1.1` is the AISec'25 paper artifact and stays put.
+## Git state *(verified 2026-09-11)*
+- `main` @ `3da5bb2` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut, PR #9
+  (#9, `docs: re-cut project governance and roadmap (ADR-009..012)`) merged. Working tree clean.
+- `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
+- Stale remote branch `origin/arc/200-project-recut` remains after PR #9 merged; safe to delete, not urgent.
+- Library is fully offline (no runtime network anywhere).
+- Suite: 21 passed, 2 xfailed. ruff/mypy not re-run this session. No open PRs — review queue is genuinely empty.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
