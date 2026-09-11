@@ -41,7 +41,7 @@ _(ARC-102) The homoglyph table is vendored offline — the library makes no runt
 | Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
 | Fully offline (no runtime network) | ✅ | ARC-102 — vendored UTS#39 table; `requests` dropped |
 | Threat taxonomy (`docs/spec/TAXONOMY.md`) | ✅ | ARC-201 (#10) — 8 `PT.INVIS.*` + 5 `PT.DECEIVE.*` + 8 `PT.DOC.*` families (21 total) with legitimate-use notes, severity/detectability, and citations. No detector code yet — ARC-202/203/204/301+ implement against this spec. |
-| Finding schema & severity model | ☐ | ARC-202 (Type-1: serialized format) |
+| Finding schema & severity model | ✅ | ARC-202 (ADR-014) — `phantomtext.core.report`: `Finding`/`Report`/`Span`/`Provenance`, JSON round-trip, SARIF 2.1.0 export. Not re-exported from `phantomtext` (public API shape is ARC-301). No detector produces one yet. |
 | Ground-truth corpus | ☐ | ARC-203 |
 | Evaluation harness (precision/recall) | ☐ | ARC-204 |
 | Core detection registry | ☐ | ARC-301 |

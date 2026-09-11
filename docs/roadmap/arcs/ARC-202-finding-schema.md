@@ -2,9 +2,8 @@
 
 - **Season:** 2 — Ground Truth & the Detection Spec
 - **Branch:** `arc/202-finding-schema` (off `main`)
-- **Status:** ☐ not started — D1–D4 approved as recommended ([ADR-014](../../decisions/ADR-014-finding-schema.md)); implementation not yet started
-- **Depends on:** ARC-201 (merged, #10 — supplies the family IDs this schema references). Fully
-  unblocked — branch and implement.
+- **Status:** ◐ in progress — implemented, PR not yet opened
+- **Depends on:** ARC-201 (merged, #10 — supplies the family IDs this schema references).
 
 ## Goal
 
@@ -60,7 +59,7 @@ it becomes a first-class, durable deliverable instead.
 | **D3** | SARIF 2.1.0 export mapping | **Type-1** | `ruleId` ← family `id`; `level` ← severity, mapped onto SARIF's `error`/`warning`/`note`/`none` (lossy from 4 levels to effectively 3+1 — needs an explicit, documented mapping table, not an implicit one); `locations[].physicalLocation.region` ← `span`. SARIF is an external standard consumed directly by GitHub code scanning and other CI tooling (ARC-601) — a wrong mapping surfaces as broken CI integrations, not a local bug. |
 | **D4** | Severity vs. confidence model | **Type-1** | Two independent axes — severity = impact if this is a true positive (a property of the *family*, TAXONOMY.md already sets defaults per family), confidence = this detector instance's certainty on this specific span (continuous `[0,1]` or a small ordinal scale) — versus one collapsed score. Drives ARC-204's precision/recall math (do we threshold on confidence before computing precision/recall, or not?) and ARC-304's override semantics (does a policy override severity, confidence, or both?). Expensive to un-collapse later once a baseline and policy model exist on top of it. |
 | D5 | Module location (e.g. `core/report.py`) | Type-2 | Internal layout, freely revisable. |
-| D6 | Implementation: stdlib `@dataclass` vs. a validation library (e.g. pydantic) | Type-2 | Default to a frozen, slotted stdlib `dataclass` — adding pydantic would itself be a new runtime dependency, which is Type-1 under CLAUDE.md's dependency rule; sidestep that gate by not adding one unless dataclasses genuinely can't do the job. |
+| D6 | Implementation: stdlib `@dataclass` vs. a validation library (e.g. pydantic) | Type-2 | Default to a frozen stdlib `dataclass` — adding pydantic would itself be a new runtime dependency, which is Type-1 under CLAUDE.md's dependency rule; sidestep that gate by not adding one unless dataclasses genuinely can't do the job. (Amended during implementation: not slotted — `frozen=True, slots=True` together hit a real CPython bug; see DECISION-LOG.) |
 | D7 | Family-`id` validation mechanism (regex vs. a generated literal/enum from `TAXONOMY.md`) | Type-2 | Behind the stable field from D1; swappable later without touching the wire format. A regex format check (`PT\.[A-Z]+\.[A-Z_]+`) is enough for this arc — a generated enum is a nice-to-have for a later arc once the taxonomy has a machine-readable form (T2 from ARC-201 flagged Markdown-vs-YAML for exactly this reason). |
 
 **Four Type-1 rows — at the batching cap (ADR-010).** If review surfaces a fifth one-way door
@@ -69,18 +68,24 @@ follow-up arc rather than adding a fifth row here.
 
 ## Acceptance criteria
 
-- [ ] `Finding` and `Report` implemented per the approved D1/D5/D6 shape
-- [ ] Family `id` field validated per the approved D7 mechanism
-- [ ] JSON serialization round-trips (`Finding`/`Report` → JSON → back), matching the approved D2 shape, including `schema_version`
-- [ ] SARIF export produces valid SARIF 2.1.0 output for at least one hand-built `Finding`, per the approved D3 mapping
-- [ ] Severity and confidence are modeled as two fields per the approved D4 shape, not collapsed
-- [ ] Unit tests cover: field validation (good and malformed family IDs), JSON round-trip, SARIF shape, at least one hand-built benign-context and one hand-built positive-context `Finding` fixture
-- [ ] `pytest` green offline & deterministic; `ruff check`/`ruff format --check`/`mypy src/phantomtext` clean
-- [ ] `STATUS.md` updated — "Finding schema" row flips from ☐ to ✅
-- [ ] `HANDOFF.md` updated, pointing at ARC-203 as the next unblocked task
-- [x] Type-2 decisions D5–D7 logged in `DECISION-LOG.md`; any made during implementation to be added
+- [x] `Finding` and `Report` implemented per the approved D1/D5/D6 shape — `src/phantomtext/core/report.py`
+- [x] Family `id` field validated per the approved D7 mechanism (regex format check)
+- [x] JSON serialization round-trips (`Finding`/`Report` → JSON → back), matching the approved D2 shape, including `schema_version`
+- [x] SARIF export produces spec-shaped SARIF 2.1.0 output for at least one hand-built `Finding`, per the approved D3 mapping
+- [x] Severity and confidence are modeled as two fields per the approved D4 shape, not collapsed
+- [x] Unit tests cover: field validation (good and malformed family IDs, out-of-range confidence, malformed spans), JSON round-trip, SARIF shape and severity mapping, empty-report edge case — 34 new tests in `tests/test_report.py`
+- [x] `pytest` green offline & deterministic (57 passed, 2 xfailed); `ruff check`/`ruff format --check`/`mypy src/phantomtext` clean
+- [x] `STATUS.md` updated — "Finding schema & severity model" row flips from ☐ to ✅
+- [x] `HANDOFF.md` updated — points at shipping this arc's PR next, ARC-203 after merge
+- [x] Type-2 decisions D5–D7 logged in `DECISION-LOG.md`, including one amendment made during implementation (D6: dropped `slots=True`, see session log)
 
 ## Session log
 - **2026-09-11** — Arc file drafted via `/arc-plan`. D5–D7 (Type-2) decided and logged. D1–D4
   (Type-1) proposed via `/decide` and approved as recommended — see
-  [ADR-014](../../decisions/ADR-014-finding-schema.md). Implementation not yet started.
+  [ADR-014](../../decisions/ADR-014-finding-schema.md).
+- **2026-09-11** — Implemented `src/phantomtext/core/report.py` (`Finding`, `Report`, `Span`,
+  `Provenance`, `Severity`) and `tests/test_report.py` (34 tests). Discovered and worked around a
+  real CPython bug: `@dataclass(frozen=True, slots=True)` raises a confusing internal `TypeError`
+  instead of `FrozenInstanceError` when an unknown attribute is set (reproduced on 3.12.13) —
+  dropped `slots=True`, amended the D6 log entry rather than silently changing it. All gates green
+  (pytest/ruff/mypy). PR not yet opened.

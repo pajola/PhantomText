@@ -10,33 +10,36 @@ is right — correct this file first, say so, then continue.
 
 ## Current position
 - **Season:** 2 — Ground Truth & the Detection Spec
-- **Active arc:** none — ARC-201 merged; ARC-202 not yet drafted
-- **Branch:** none — create `arc/202-finding-schema` off `main` once the arc file is drafted
+- **Active arc:** ARC-202 — Finding schema & severity model (**implemented, PR not yet opened**)
+- **Branch:** `arc/202-finding-schema` (off `main`), not pushed
 - **Next release target:** 0.2.0 (end of Season 3)
-- **Review queue:** empty ✅ (cap is 1)
+- **Review queue:** empty ✅ (cap is 1) — opening this arc's PR fills it to 1/1
 
 ## >>> START HERE (next session)
 This task needs **no maintainer action to begin**. Start it unattended.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green.
-2. There is no `docs/roadmap/arcs/ARC-202-finding-schema.md` yet — run `/arc-plan` to draft it from
-   `ROADMAP.md`'s ARC-202 entry ("codepoint span, char/byte offsets, family ID, severity, confidence,
-   provenance, suggested remediation; JSON and SARIF shapes") before branching or implementing.
-3. This arc carries a **Type-1 gate by the roadmap's own description**: the serialized `Finding`
-   schema is a wire/on-disk format users will build tooling against. Expect the arc-planning pass to
-   surface that as the sign-off point — don't implement past it unapproved.
-4. Read `docs/spec/TAXONOMY.md` first — the schema's `family` field references the family IDs fixed
-   there (`PT.<CLASS>.<FAMILY>`, ADR-013), so the schema design needs to know that shape already
-   exists and is settled.
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `arc/202-finding-schema` is checked out and the
+   suite is green: 57 passed, 2 xfailed (up from 21 — `tests/test_report.py` adds 34).
+2. Read `docs/roadmap/arcs/ARC-202-finding-schema.md`'s session log for what's already decided and
+   implemented — all D1–D7 are settled ([ADR-014](../decisions/ADR-014-finding-schema.md)), all
+   acceptance criteria but "HANDOFF.md updated" and the PR itself are checked off.
+3. Run `/arc-ship`: quality gates, diff summary, risk notes, PR body, merge command. **Flag one
+   thing in the risk notes**: implementation deviated from the approved D6 in one respect — the
+   planned `slots=True` was dropped after it combined with `frozen=True` to hit a real CPython bug
+   (confirmed on 3.12.13, reproducer in the session log). This is a Type-2 amendment already logged
+   in `DECISION-LOG.md`, not a new Type-1 question, but it's a deviation from what was written down
+   and worth a sentence in the PR body rather than only in the log.
+4. Open the PR. That fills the review queue to cap — do not start ARC-203 until it merges.
 
 ## Git state *(verified 2026-09-11)*
-- `main` @ `e1dd352` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
-  + **ARC-201 threat taxonomy (#10)** merged. Working tree clean.
+- `main` @ `8ab7143` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
+  + ARC-201 threat taxonomy (#10) + ARC-202's plan and ADR-014 (direct commits, pre-implementation)
+  merged. Working tree clean on `main`.
+- `arc/202-finding-schema` created off `main`, not yet pushed. Adds
+  `src/phantomtext/core/report.py` and `tests/test_report.py` — no other `src/` files touched.
 - `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
-- Both `arc/200-project-recut` and `arc/201-threat-taxonomy` remote branches were deleted on merge —
-  no stale branches remain.
-- Library is fully offline (no runtime network anywhere). Docs-only arc (ARC-201) — no `src/` changes,
-  gates unchanged from before it: 21 passed, 2 xfailed; ruff/mypy clean.
+- Library is fully offline (no runtime network anywhere). Suite on the branch: 57 passed, 2 xfailed;
+  ruff/mypy clean.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
@@ -53,13 +56,13 @@ This task needs **no maintainer action to begin**. Start it unattended.
   collapsed to 8 (DECISION-LOG). *(#10)*
 
 ## Next steps
-1. **ARC-202 — Finding schema & severity model** (this session's target; unblocked, but needs
-   `/arc-plan` first — no arc file exists yet). Carries a Type-1 gate: the serialized schema.
-2. ARC-203 — Ground-truth corpus, including the benign multilingual set.
+1. **Ship ARC-202's PR** (`/arc-ship`) — implementation is done, this is the unblocked next action.
+2. ARC-203 — Ground-truth corpus, including the benign multilingual set. Do not start until ARC-202's
+   PR is merged (review-queue cap).
 3. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
 
 ## Open questions / awaiting maintainer
-- None. The queue is deliberately empty. **Keep it that way** — see the review-queue cap in `CLAUDE.md`.
+- None yet — ARC-202's PR is about to be opened, which will make this the one arc in the queue.
 
 ## Post-mortem: why the project stalled 2026-08-05 → 2026-09-10
 Recorded here so a future session does not recreate the conditions.
