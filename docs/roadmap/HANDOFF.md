@@ -10,21 +10,29 @@ is right — correct this file first, say so, then continue.
 
 ## Current position
 - **Season:** 2 — Ground Truth & the Detection Spec
-- **Active arc:** ARC-201 — Threat taxonomy (**not started**)
-- **Branch:** none yet — create `arc/201-threat-taxonomy` off `main`
+- **Active arc:** ARC-201 — Threat taxonomy (**content drafted, PR not yet opened**)
+- **Branch:** `arc/201-threat-taxonomy` (off `main`), not pushed
 - **Next release target:** 0.2.0 (end of Season 3)
-- **Review queue:** empty ✅ (cap is 1)
+- **Review queue:** empty ✅ (cap is 1) — opening this arc's PR next session/turn will fill it to 1/1
 
 ## >>> START HERE (next session)
 This task needs **no maintainer action to begin**. Start it unattended.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green.
-2. Read `docs/roadmap/arcs/ARC-201-threat-taxonomy.md`.
-3. Branch `arc/201-threat-taxonomy` off `main`.
-4. Draft `docs/spec/TAXONOMY.md`. Research is the bulk of this arc — use the `unicode-analyst` subagent for
-   the Unicode semantics and, above all, for the legitimate-use notes.
-5. The only Type-1 gate in this arc is the **family ID naming scheme** (IDs land in user config files and CI
-   baselines, so they are expensive to change). Everything else here is Type-2 — decide and log it.
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `arc/201-threat-taxonomy` is checked out and the suite is
+   green (no `src/` changes this arc, so it should be unchanged from `main`).
+2. Read `docs/spec/TAXONOMY.md` (the drafted content) and the ARC-201 arc file's session log for what's
+   already decided.
+3. Run `/arc-ship`: quality gates, diff summary, risk notes, PR body, merge command. **Flag the
+   `PT.DOC.*` 16-vs-8 family-ID expansion in the risk notes explicitly** — it's logged as Type-2
+   (DECISION-LOG 2026-09-11) but is the one thing in this arc worth the maintainer's deliberate look, since
+   the arc's own acceptance criteria call family-ID stability out as the point of the exercise.
+4. Open the PR. That fills the review queue to its cap of 1 — the session after this one should not start a
+   new arc; its job is to make this review cheap (see `CLAUDE.md`'s review-queue-cap rule).
+
+Remaining open items are recorded in `docs/spec/TAXONOMY.md`'s own "Open items carried forward" section
+(two candidate `PT.INVIS.*` ID splits deferred to the ARC-202 schema freeze, an OCR-engine
+runtime-dependency flag for ARC-405, and two format details needing verification) — nothing here blocks
+shipping this arc's PR.
 
 ## Git state *(verified 2026-09-11)*
 - `main` @ `3da5bb2` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut, PR #9
@@ -45,8 +53,9 @@ This task needs **no maintainer action to begin**. Start it unattended.
   (ADR-009). Season 1 closed early: ARC-101/102 delivered, ARC-103–106 superseded.
 
 ## Next steps
-1. **ARC-201 — Threat taxonomy** (this session's target; unblocked).
-2. ARC-202 — Finding schema. Carries a Type-1 gate: the serialized schema.
+1. **Ship ARC-201's PR** (`/arc-ship`) — content is drafted, this is the unblocked next action.
+2. ARC-202 — Finding schema. Carries a Type-1 gate: the serialized schema. Do not start until ARC-201's PR
+   is merged (review-queue cap).
 3. ARC-203 — Ground-truth corpus, including the benign multilingual set.
 4. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
 

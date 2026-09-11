@@ -2,7 +2,7 @@
 
 - **Season:** 2 — Ground Truth & the Detection Spec
 - **Branch:** `arc/201-threat-taxonomy` (off `main`)
-- **Status:** ☐ not started
+- **Status:** ◐ in progress — content drafted, PR not yet opened
 - **Depends on:** nothing — **this arc is unblocked and can start unattended**
 
 ## Goal
@@ -84,14 +84,26 @@ Only **T1** needs sign-off. Present it alone; do not bundle the others.
 
 ## Acceptance criteria
 
-- [ ] `docs/spec/TAXONOMY.md` covers every family listed in scope
-- [ ] Every entry has a legitimate-use note, or an explicit "no legitimate use" justification
-- [ ] Every entry marked text-level or requires-format-parsing
-- [ ] Family IDs follow the approved T1 scheme and are stable
-- [ ] Cross-referenced against UTS #39, UAX #9, UAX #31 and the Trojan Source paper — citations included
-- [ ] `ROADMAP.md` ARC-201 marked ☑; `STATUS.md` gains a taxonomy-coverage row
-- [ ] `HANDOFF.md` updated, pointing at ARC-202 as an unblocked next task
-- [ ] Type-2 decisions logged in `DECISION-LOG.md`
+- [x] `docs/spec/TAXONOMY.md` covers every family listed in scope
+- [x] Every entry has a legitimate-use note, or an explicit "no legitimate use" justification
+- [x] Every entry marked text-level or requires-format-parsing
+- [ ] Family IDs follow the approved T1 scheme and are stable — the scheme (ADR-013) is followed
+      throughout; **not checked off** because `PT.DOC.*` expanded to 16 IDs against the arc's 8
+      scope bullets (DECISION-LOG 2026-09-11) and hasn't had a maintainer look yet — IDs aren't
+      "stable" until that's been through PR review.
+- [x] Cross-referenced against UTS #39, UAX #9, UAX #31 and the Trojan Source paper — citations included
+- [ ] `ROADMAP.md` ARC-201 marked ☑ — currently ◐ (content drafted, PR not opened); flips to ☑ on merge
+- [x] `STATUS.md` gains a taxonomy-coverage row
+- [ ] `HANDOFF.md` updated, pointing at ARC-202 as an unblocked next task — in progress this session
+- [x] Type-2 decisions logged in `DECISION-LOG.md`
 
 ## Session log
-- *(empty — arc not started)*
+- **2026-09-11** — Branched `arc/201-threat-taxonomy`. T1 (family ID naming scheme) proposed and
+  approved as `PT.<CLASS>.<FAMILY>` — see [ADR-013](../../decisions/ADR-013-family-id-naming-scheme.md).
+  T2/T3/T4 decided and logged (Markdown doc format, 4-level severity scale, UTS #39 restriction
+  levels verbatim). Three parallel `unicode-analyst` research passes (invisible/deceiving/
+  document-level) drafted `docs/spec/TAXONOMY.md`: 8 `PT.INVIS.*`, 5 `PT.DECEIVE.*`, 16
+  `PT.DOC.*` entries. The `PT.DOC.*` count is a material expansion of the 8 scope bullets — logged
+  as Type-2, flagged for maintainer veto at PR review rather than treated as silently settled.
+  Added a missing UAX #31 citation the first draft omitted. PR not yet opened — next session (or
+  later this one) should run `/arc-ship` to prepare it.
