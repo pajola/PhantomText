@@ -94,7 +94,10 @@ Only **T1** needs sign-off. Present it alone; do not bundle the others.
 - [x] Cross-referenced against UTS #39, UAX #9, UAX #31 and the Trojan Source paper — citations included
 - [ ] `ROADMAP.md` ARC-201 marked ☑ — currently ◐ (content drafted, PR not opened); flips to ☑ on merge
 - [x] `STATUS.md` gains a taxonomy-coverage row
-- [ ] `HANDOFF.md` updated, pointing at ARC-202 as an unblocked next task — in progress this session
+- [x] `HANDOFF.md` updated — pointing at **shipping this arc's PR**, not ARC-202, as the unblocked
+      next task. Starting ARC-202 now would put two arcs in the review queue at once, which is the
+      exact failure mode ADR-010 exists to prevent; ARC-202 becomes the pointed-to task only after
+      this PR merges.
 - [x] Type-2 decisions logged in `DECISION-LOG.md`
 
 ## Session log
