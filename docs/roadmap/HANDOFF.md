@@ -1,66 +1,77 @@
 # HANDOFF — Live project state
 
 The living state file. **Read this first** at the start of every session; **update it** at the end of every session.
-It is the handoff between sessions.
+
+⚠️ **Do not trust this file on sight.** It has drifted before. Run Step 0 of the session loop in `CLAUDE.md`
+and reconcile against `git log`, `git status` and `gh pr list`. If this file disagrees with the repo, the repo
+is right — correct this file first, say so, then continue.
 
 ---
 
 ## Current position
-- **Season:** 1 — Core API Consolidation
-- **Active arc:** ARC-103 — String-first public API (**planned; decisions H1–H8 awaiting sign-off**)
-- **Branch:** none yet (create `arc/103-string-first-api` off `main` after H1–H8 are approved)
-- **Next release target:** 0.2.0 (end of Season 1)
+- **Season:** 2 — Ground Truth & the Detection Spec
+- **Active arc:** ARC-201 — Threat taxonomy (**not started**)
+- **Branch:** none yet — create `arc/201-threat-taxonomy` off `main`
+- **Next release target:** 0.2.0 (end of Season 3)
+- **Review queue:** empty ✅ (cap is 1)
 
 ## >>> START HERE (next session)
-1. Read `docs/roadmap/arcs/ARC-103-string-first-api.md` — the ARC-103 plan with decision table **H1–H8**.
-2. Present H1–H8 to Luca, get sign-off (human-in-the-middle), write **ADR-009** for the API shape.
-3. Then branch `arc/103-string-first-api` off `main` and implement. `uv sync --extra dev`;
-   verify with `uv run --no-sync pytest` / `ruff check .` / `mypy src/phantomtext`.
+This task needs **no maintainer action to begin**. Start it unattended.
 
-## Git state
-- `main` @ `a6efa20` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. Auth via gh (classic PAT).
-- Working tree clean; **library is fully offline** (no runtime network anywhere).
-- Env: `uv` only (`uv run --no-sync` avoids re-syncing away dev extras). Suite: 21 passed, 2 xfailed; ruff/mypy clean.
-- CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking). Repo also runs a Sourcery bot on PRs (not a gate).
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green.
+2. Read `docs/roadmap/arcs/ARC-201-threat-taxonomy.md`.
+3. Branch `arc/201-threat-taxonomy` off `main`.
+4. Draft `docs/spec/TAXONOMY.md`. Research is the bulk of this arc — use the `unicode-analyst` subagent for
+   the Unicode semantics and, above all, for the legitimate-use notes.
+5. The only Type-1 gate in this arc is the **family ID naming scheme** (IDs land in user config files and CI
+   baselines, so they are expensive to change). Everything else here is Type-2 — decide and log it.
+
+## Git state *(verified 2026-09-10)*
+- `main` @ `ce46a1a` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) merged. No other remote branches.
+- Working tree clean. Library is fully offline (no runtime network anywhere).
+- Suite: 21 passed, 2 xfailed. ruff/mypy clean. CI = 12 jobs (ruff, build/import ×5, pytest ×5, mypy non-blocking).
+- Tag `v0.1.1` is the AISec'25 paper artifact and stays put.
 
 ## Done
-- 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout/hygiene) written, merged to `main` (PRs #1, #3).
-  (Note: original stacked PR #2 was auto-closed when its base branch was deleted during #1's merge; arc/002
-  was rebased onto main and re-merged as #3.)
-- 2026-08-04 — ARC-003: Hatchling PEP 621 build; deleted setup.py/requirements.txt/build_package.sh/MANIFEST.in;
-  metadata fixed; deps corrected (drop Flask, PyPDF2>=3.0, pytest→dev); ruff/mypy/pytest config; pre-commit;
-  CI workflow; ruff format+autofix baseline (+5 hand fixes); requires-python >=3.9. ADR-006 (Hatchling). Merged (#4).
-- 2026-08-04 — ARC-004: rewrote tests as offline/deterministic pytest; 5 legacy test files removed; xfail for
-  the two stubs; CI pytest matrix + non-blocking mypy. E1–E5 accepted. Merged (#5) → **Season 0 complete**.
-- 2026-08-04 — ARC-101: new `core/base.py`; migrated all 8 techniques; `sanitized`→`sanitize` (aliased);
-  `name`/`family` metadata; honest injection `check()` stubs. ADR-007. Merged (#6).
-- 2026-08-05 — ARC-102: vendored `intentional.txt` in `phantomtext/data/` (offline, cached parser); removed the
-  runtime `requests.get`; **dropped `requests`**; added `python -m phantomtext.data.refresh_homoglyphs`;
-  simplified tests (no more network patch). ADR-008. 21 passed, 2 xfailed. Library now fully offline.
+- 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
+- 2026-08-04 — ARC-003: Hatchling PEP 621 build, tooling, CI, pre-commit. ADR-006. *(#4)*
+- 2026-08-04 — ARC-004: offline deterministic pytest baseline; Season 0 complete. *(#5)*
+- 2026-08-04 — ARC-101: unified `core/base.py`; 8 techniques migrated. ADR-007. *(#6)*
+- 2026-08-05 — ARC-102: vendored UTS#39 table; `requests` dropped; library fully offline. ADR-008. *(#7)*
+- **2026-09-10 — Project re-cut.** Root cause of the five-week stall diagnosed and fixed in governance
+  (ADR-010), roadmap re-cut detection-first (ADR-011), clean-room core adopted (ADR-012), ARC-103 superseded
+  (ADR-009). Season 1 closed early: ARC-101/102 delivered, ARC-103–106 superseded.
 
 ## Next steps
-1. Push `arc/102-vendor-homoglyphs`, open PR → `main`; maintainer reviews CI + merges.
-2. **ARC-103 — string-first public API**: the central ADR-002 deliverable. Design `scan / obfuscate / inject /
-   sanitize` operating on `str`, with the file layer wrapping them; add deprecation shims for the 0.1 facades
-   (`ContentObfuscator`, `ContentInjector`, `FileScanner`). Then ARC-104 (formats incl. txt), ARC-105 (fix RNG
-   off-by-one + drop numpy), ARC-106 (batch/parallel). Season 1 closes with the 0.2.0 release.
+1. **ARC-201 — Threat taxonomy** (this session's target; unblocked).
+2. ARC-202 — Finding schema. Carries a Type-1 gate: the serialized schema.
+3. ARC-203 — Ground-truth corpus, including the benign multilingual set.
+4. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
 
 ## Open questions / awaiting maintainer
-- Review & merge ARC-004 PR (watch CI) → closes Season 0.
+- None. The queue is deliberately empty. **Keep it that way** — see the review-queue cap in `CLAUDE.md`.
 
-## Key findings from the 0.1.1 audit (context for upcoming arcs)
-- Two duplicate `AttackBase` classes with incompatible signatures.
-- `ContentInjector.inject()` is a stub; real injection lives in `injection/*` with a different API.
-- `FileSanitizer.sanitize_file()` is `pass` (advertised but non-functional).
-- `HomoglyphText` fetches unicode.org at runtime on every instantiation (no cache/timeout/offline path);
-  `FileScanner.__init__` triggers it → every scan hits the network.
-- Off-by-one in zero-width RNG (`randint(0, n-1)` never picks the last symbol).
-- Injection `check()` methods are `pass` → scanner blind to injection.
-- `obfuscate()` accepts `"markdown"` but no obfuscator supports it → crash. `.txt` handler exists but isn't wired.
-- Packaging smells: `font-poisoning.py` (unimportable), `test.py` in package, Flask/requests as core deps,
-  placeholder `example.com` author email, wrong repo URL in metadata, dead artifacts in the tarball.
+## Post-mortem: why the project stalled 2026-08-05 → 2026-09-10
+Recorded here so a future session does not recreate the conditions.
 
-## Working-core inventory (preserve through the refactor)
-`obfuscation/{zero_width_text, homoglyph_text, diacritical_marks, reordering_char}`,
-`injection/{zerosize_injection, transparent_injection}`, `file_scanning.FileScanner`,
-`formats/{pdf, docx, html, txt}`, `text_loader`, `text_saver`, `fonts/DejaVuSans.*`.
+1. **An untiered sign-off rule.** Every decision, however reversible, needed the maintainer. ARC-103 accumulated
+   eight of them into a single gate that required one contiguous block of attention. It never came. → ADR-010
+   splits decisions into one-way and two-way doors and caps a gate at four.
+2. **Sessions ended blocked.** Four arcs sat "done, awaiting review" simultaneously. Every possible next action
+   required the maintainer, so a fresh session had nothing it could legally start. → ADR-010 requires every
+   session to end on a task that needs no maintainer action, and caps the review queue at one.
+3. **The state file drifted.** This file instructed a session to push and open a PR for `arc/102`, which was
+   already merged into `main`. A state file that lies costs more than no state file. → Step 0 of the session
+   loop now verifies HANDOFF against the repo before acting on it.
+
+## Key findings from the 0.1.1 audit (now corpus test cases, not bugs to patch)
+Under the clean-room decision (ADR-012) these are no longer fixes to make — they are regressions the new core
+must never reintroduce, and each should become a test:
+- Two duplicate `AttackBase` classes with incompatible signatures. *(fixed in ARC-101)*
+- `ContentInjector.inject()` a stub; real injection elsewhere with a different API.
+- `FileSanitizer.sanitize_file()` was `pass` — advertised but non-functional.
+- `HomoglyphText` fetched unicode.org at runtime on every instantiation. *(fixed in ARC-102)*
+- Off-by-one in zero-width RNG: `randint(0, n-1)` never picks the last symbol.
+- Injection `check()` methods were `pass` → scanner blind to injection.
+- `obfuscate()` accepted `"markdown"` with no obfuscator behind it → crash.
+- `.txt` handler existed but was never wired up.
