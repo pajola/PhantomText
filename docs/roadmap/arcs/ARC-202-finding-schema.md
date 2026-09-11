@@ -2,7 +2,7 @@
 
 - **Season:** 2 — Ground Truth & the Detection Spec
 - **Branch:** `arc/202-finding-schema` (off `main`)
-- **Status:** ◐ in progress — implemented, PR not yet opened
+- **Status:** ☑ done *(2026-09-11, #11)*
 - **Depends on:** ARC-201 (merged, #10 — supplies the family IDs this schema references).
 
 ## Goal

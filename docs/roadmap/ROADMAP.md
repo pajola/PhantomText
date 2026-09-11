@@ -55,9 +55,9 @@ grade any detector — *before* a detector exists. This is the season that makes
   *The legitimate-use note is the point of this arc:* ZWJ in emoji sequences and Devanagari, ZWNJ in Persian,
   RTL marks in Arabic and Hebrew, combining marks in Vietnamese — a detector that flags these is not a
   security tool, it is a nuisance.
-- ☐ **ARC-202 — Finding schema & severity model** *(absorbs H2)* — codepoint span, char/byte offsets, family
+- ☑ **ARC-202 — Finding schema & severity model** *(absorbs H2, 2026-09-11, #11)* — codepoint span, char/byte offsets, family
   ID, severity, confidence, provenance (page / node / run), suggested remediation. JSON and SARIF shapes.
-  **Type-1** — this is a serialized format users will pin CI baselines to.
+  **Type-1** — ADR-014.
 - ☐ **ARC-203 — Ground-truth corpus & generator** — clean/attacked pairs across family × format with a JSONL
   manifest. Must include a **benign corpus**: real multilingual text (Persian, Hindi, Arabic, Hebrew,
   Vietnamese, Chinese, emoji-heavy) that must yield zero findings. False positives are the failure mode that

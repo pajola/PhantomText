@@ -10,36 +10,40 @@ is right — correct this file first, say so, then continue.
 
 ## Current position
 - **Season:** 2 — Ground Truth & the Detection Spec
-- **Active arc:** ARC-202 — Finding schema & severity model (**implemented, PR not yet opened**)
-- **Branch:** `arc/202-finding-schema` (off `main`), not pushed
+- **Active arc:** none — ARC-202 merged; ARC-203 not yet drafted
+- **Branch:** none — create `arc/203-ground-truth-corpus` off `main` once the arc file is drafted
 - **Next release target:** 0.2.0 (end of Season 3)
-- **Review queue:** empty ✅ (cap is 1) — opening this arc's PR fills it to 1/1
+- **Review queue:** empty ✅ (cap is 1)
 
 ## >>> START HERE (next session)
 This task needs **no maintainer action to begin**. Start it unattended.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `arc/202-finding-schema` is checked out and the
-   suite is green: 57 passed, 2 xfailed (up from 21 — `tests/test_report.py` adds 34).
-2. Read `docs/roadmap/arcs/ARC-202-finding-schema.md`'s session log for what's already decided and
-   implemented — all D1–D7 are settled ([ADR-014](../decisions/ADR-014-finding-schema.md)), all
-   acceptance criteria but "HANDOFF.md updated" and the PR itself are checked off.
-3. Run `/arc-ship`: quality gates, diff summary, risk notes, PR body, merge command. **Flag one
-   thing in the risk notes**: implementation deviated from the approved D6 in one respect — the
-   planned `slots=True` was dropped after it combined with `frozen=True` to hit a real CPython bug
-   (confirmed on 3.12.13, reproducer in the session log). This is a Type-2 amendment already logged
-   in `DECISION-LOG.md`, not a new Type-1 question, but it's a deviation from what was written down
-   and worth a sentence in the PR body rather than only in the log.
-4. Open the PR. That fills the review queue to cap — do not start ARC-203 until it merges.
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green (57
+   passed, 2 xfailed).
+2. There is no `docs/roadmap/arcs/ARC-203-*.md` yet — run `/arc-plan` to draft it from
+   `ROADMAP.md`'s ARC-203 entry ("clean/attacked pairs across family × format with a JSONL
+   manifest... must include a benign corpus: real multilingual text ... that must yield zero
+   findings") before branching or implementing.
+3. Read `docs/spec/TAXONOMY.md` and `src/phantomtext/core/report.py` first — the corpus manifest
+   will reference family IDs (ADR-013) and almost certainly wants to reuse or mirror the `Finding`
+   shape (ADR-014) for its labels, so both need to be known quantities before designing the
+   manifest format.
+4. This arc is **not** a Type-1 gate by the roadmap's own description, but "the JSONL manifest
+   shape" is exactly the kind of thing that's easy to mistake for Type-2 when it's really closer to
+   a serialized format later arcs (ARC-204's baseline) will freeze against — don't manufacture
+   doubt, but don't wave it through either; the arc-planning pass should classify it honestly.
+5. Remember CLAUDE.md rule 7: no detection family may merge without both positive and benign
+   samples. There is no detector yet (Season 3), so this arc's job is building the corpus and its
+   generator, not wiring it into anything that grades a detector.
 
 ## Git state *(verified 2026-09-11)*
-- `main` @ `8ab7143` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
-  + ARC-201 threat taxonomy (#10) + ARC-202's plan and ADR-014 (direct commits, pre-implementation)
-  merged. Working tree clean on `main`.
-- `arc/202-finding-schema` created off `main`, not yet pushed. Adds
-  `src/phantomtext/core/report.py` and `tests/test_report.py` — no other `src/` files touched.
+- `main` @ `2e9f124` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
+  + ARC-201 threat taxonomy (#10) + **ARC-202 Finding/Report schema (#11)** merged. Working tree
+  clean.
+- `arc/202-finding-schema` remote branch was deleted on merge — no stale branches remain.
 - `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
-- Library is fully offline (no runtime network anywhere). Suite on the branch: 57 passed, 2 xfailed;
-  ruff/mypy clean.
+- Library is fully offline (no runtime network anywhere). Suite: 57 passed, 2 xfailed; ruff/mypy
+  clean.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
@@ -54,15 +58,19 @@ This task needs **no maintainer action to begin**. Start it unattended.
   ×8, `PT.DECEIVE.*` ×5, `PT.DOC.*` ×8), each with a legitimate-use note, severity, detectability,
   and citations. ADR-013 (family ID scheme). An initial `PT.DOC.*` draft of 16 IDs was reviewed and
   collapsed to 8 (DECISION-LOG). *(#10)*
+- **2026-09-11 — ARC-202: Finding/Report schema.** `src/phantomtext/core/report.py` — `Finding`,
+  `Report`, `Span`, `Provenance`, `Severity`; JSON round-trip; SARIF 2.1.0 export. ADR-014 (D1–D4).
+  Not re-exported from `phantomtext` (public API shape is ARC-301). Implementation dropped the
+  planned `slots=True` after it hit a real CPython bug combined with `frozen=True` — logged as a
+  Type-2 amendment, not re-gated. *(#11)*
 
 ## Next steps
-1. **Ship ARC-202's PR** (`/arc-ship`) — implementation is done, this is the unblocked next action.
-2. ARC-203 — Ground-truth corpus, including the benign multilingual set. Do not start until ARC-202's
-   PR is merged (review-queue cap).
-3. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
+1. **ARC-203 — Ground-truth corpus & generator** (this session's target; unblocked, but needs
+   `/arc-plan` first — no arc file exists yet).
+2. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
 
 ## Open questions / awaiting maintainer
-- None yet — ARC-202's PR is about to be opened, which will make this the one arc in the queue.
+- None. The queue is deliberately empty. **Keep it that way** — see the review-queue cap in `CLAUDE.md`.
 
 ## Post-mortem: why the project stalled 2026-08-05 → 2026-09-10
 Recorded here so a future session does not recreate the conditions.
