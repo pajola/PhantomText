@@ -1,6 +1,8 @@
-# Decision Log (ADR index)
+# Decision Log
 
-Every meaningful decision is an Architecture Decision Record (ADR). This is the index. Status values:
+## Part 1 — ADR index (Type-1 decisions)
+
+One-way doors. Every one is an Architecture Decision Record requiring maintainer sign-off. Status values:
 **Proposed** (awaiting maintainer) · **Accepted** · **Rejected** · **Superseded by ADR-xxx**.
 
 | ADR | Title | Status | Date |
@@ -9,7 +11,21 @@ Every meaningful decision is an Architecture Decision Record (ADR). This is the 
 | [002](ADR-002-string-first-api.md) | String-first core API | Accepted | 2026-08-03 |
 | [003](ADR-003-build-tooling.md) | uv + PEP 621 build & tooling | Accepted | 2026-08-03 |
 | [004](ADR-004-dependencies.md) | Batteries-included dependencies | Accepted | 2026-08-03 |
-| [005](ADR-005-arc-workflow.md) | Per-arc branches & PRs | Accepted | 2026-08-03 |
+| [005](ADR-005-arc-workflow.md) | Per-arc branches & PRs | Accepted (amended by 010) | 2026-08-03 |
 | [006](ADR-006-build-backend.md) | Build backend: Hatchling | Accepted | 2026-08-04 |
 | [007](ADR-007-attack-base-hierarchy.md) | Attack base-class hierarchy | Accepted | 2026-08-04 |
 | [008](ADR-008-offline-homoglyph-data.md) | Offline homoglyph data | Accepted | 2026-08-05 |
+| [009](ADR-009-supersede-arc-103.md) | Supersede ARC-103 (string-first public API) | Accepted | 2026-09-10 |
+| [010](ADR-010-tiered-decisions.md) | Tiered decisions, unblocked handoffs, review-queue cap | Accepted | 2026-09-10 |
+| [011](ADR-011-detection-first-ground-truth.md) | Detection-first roadmap; no detector without ground truth | Accepted | 2026-09-10 |
+| [012](ADR-012-clean-room-core.md) | Clean-room rewrite of the core | Accepted | 2026-09-10 |
+
+## Part 2 — Type-2 log (two-way doors)
+
+Reversible decisions the assistant made without a sign-off gate, per ADR-010. One line each, newest last.
+The maintainer may veto any of these at PR review — that is the intended safety net.
+
+Format: `YYYY-MM-DD — [T2] <decision> — <one-line rationale>`
+
+- 2026-09-10 — [T2] Season numbering continues from 2 rather than restarting after the re-cut — keeps the ADR trail and PR history legible against the roadmap.
+- 2026-09-10 — [T2] The 0.1 audit bug list is carried in HANDOFF as prospective corpus samples rather than as an open bug list — under ADR-012 the code they describe will not exist.
