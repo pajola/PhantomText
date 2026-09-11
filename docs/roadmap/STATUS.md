@@ -40,7 +40,7 @@ _(ARC-102) The homoglyph table is vendored offline — the library makes no runt
 |-----------|:------:|-------|
 | Unified attack base (`core/base.py`) | ✅ | ARC-101 — Attack/ObfuscationAttack/InjectionAttack + `name`/`family` |
 | Fully offline (no runtime network) | ✅ | ARC-102 — vendored UTS#39 table; `requests` dropped |
-| Threat taxonomy (`docs/spec/TAXONOMY.md`) | 🟡 | ARC-201 — 8 `PT.INVIS.*` + 5 `PT.DECEIVE.*` + 16 `PT.DOC.*` families drafted with legitimate-use notes and citations; not yet accepted (PR pending review — see the doc's own scope note on the `PT.DOC.*` split) |
+| Threat taxonomy (`docs/spec/TAXONOMY.md`) | 🟡 | ARC-201 — 8 `PT.INVIS.*` + 5 `PT.DECEIVE.*` + 8 `PT.DOC.*` families (21 total) with legitimate-use notes and citations; not yet accepted (PR #10 open, updated per maintainer review) |
 | Finding schema & severity model | ☐ | ARC-202 (Type-1: serialized format) |
 | Ground-truth corpus | ☐ | ARC-203 |
 | Evaluation harness (precision/recall) | ☐ | ARC-204 |

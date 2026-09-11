@@ -87,10 +87,9 @@ Only **T1** needs sign-off. Present it alone; do not bundle the others.
 - [x] `docs/spec/TAXONOMY.md` covers every family listed in scope
 - [x] Every entry has a legitimate-use note, or an explicit "no legitimate use" justification
 - [x] Every entry marked text-level or requires-format-parsing
-- [ ] Family IDs follow the approved T1 scheme and are stable — the scheme (ADR-013) is followed
-      throughout; **not checked off** because `PT.DOC.*` expanded to 16 IDs against the arc's 8
-      scope bullets (DECISION-LOG 2026-09-11) and hasn't had a maintainer look yet — IDs aren't
-      "stable" until that's been through PR review.
+- [x] Family IDs follow the approved T1 scheme and are stable — scheme (ADR-013) followed
+      throughout. `PT.DOC.*`'s 16-ID draft was reviewed and vetoed by the maintainer on PR #10;
+      collapsed to 8, 1:1 with the arc's scope bullets, matching `PT.INVIS.*`/`PT.DECEIVE.*`.
 - [x] Cross-referenced against UTS #39, UAX #9, UAX #31 and the Trojan Source paper — citations included
 - [ ] `ROADMAP.md` ARC-201 marked ☑ — currently ◐ (content drafted, PR not opened); flips to ☑ on merge
 - [x] `STATUS.md` gains a taxonomy-coverage row
@@ -108,5 +107,10 @@ Only **T1** needs sign-off. Present it alone; do not bundle the others.
   document-level) drafted `docs/spec/TAXONOMY.md`: 8 `PT.INVIS.*`, 5 `PT.DECEIVE.*`, 16
   `PT.DOC.*` entries. The `PT.DOC.*` count is a material expansion of the 8 scope bullets — logged
   as Type-2, flagged for maintainer veto at PR review rather than treated as silently settled.
-  Added a missing UAX #31 citation the first draft omitted. PR not yet opened — next session (or
-  later this one) should run `/arc-ship` to prepare it.
+  Added a missing UAX #31 citation the first draft omitted. Ran `/arc-ship`: gates green, PR #10
+  opened, review queue at cap (1). Maintainer reviewed and vetoed the `PT.DOC.*` expansion —
+  collapsed to 8 IDs (1:1 with scope bullets), merging the 11 finer-grained entries into 3 by
+  documenting their distinct sub-mechanisms as prose modes within one family rather than as
+  separate IDs. `DECISION-LOG.md` updated to record the reversal rather than editing the original
+  entry away. All acceptance criteria now met; PR #10 pushed with the collapse, ready for final
+  review/merge.
