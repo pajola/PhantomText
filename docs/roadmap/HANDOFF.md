@@ -18,7 +18,7 @@ is right — correct this file first, say so, then continue.
 ## >>> START HERE (next session)
 This task needs **no maintainer action to begin**. Start it unattended.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green (57
+1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green (55
    passed, 2 xfailed).
 2. There is no `docs/roadmap/arcs/ARC-203-*.md` yet — run `/arc-plan` to draft it from
    `ROADMAP.md`'s ARC-203 entry ("clean/attacked pairs across family × format with a JSONL
@@ -36,14 +36,14 @@ This task needs **no maintainer action to begin**. Start it unattended.
    samples. There is no detector yet (Season 3), so this arc's job is building the corpus and its
    generator, not wiring it into anything that grades a detector.
 
-## Git state *(verified 2026-09-11)*
-- `main` @ `2e9f124` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
+## Git state *(verified 2026-09-13)*
+- `main` @ `a92ae21` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
   + ARC-201 threat taxonomy (#10) + **ARC-202 Finding/Report schema (#11)** merged. Working tree
   clean.
 - `arc/202-finding-schema` remote branch was deleted on merge — no stale branches remain.
 - `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
-- Library is fully offline (no runtime network anywhere). Suite: 57 passed, 2 xfailed; ruff/mypy
-  clean.
+- Library is fully offline (no runtime network anywhere). Suite: 55 passed, 2 xfailed (corrected
+  from 57 — count drift, no failures); no open PRs; no `docs/roadmap/arcs/ARC-203-*.md` yet.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
