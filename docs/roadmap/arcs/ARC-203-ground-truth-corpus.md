@@ -74,26 +74,37 @@ one (e.g. disagreement with the D2 scope cut), it can be added without exceeding
 
 ## Acceptance criteria
 
-- [ ] Manifest schema implemented per approved D1, with a loader/writer (round-trips JSONL → objects → JSONL)
-- [ ] Generator produces, deterministically (fixed seed), at least one positive and one benign sample for
-      all 13 in-scope families (`PT.INVIS.*` ×8, `PT.DECEIVE.*` ×5)
-- [ ] Benign multilingual corpus present per approved D3 sourcing: Persian, Hindi, Arabic, Hebrew,
-      Vietnamese, Chinese, plus an emoji-heavy sample set
-- [ ] Every new family generator has both a positive and a benign sample (CLAUDE.md rule 7's own
+- [x] Manifest schema implemented per approved D1, with a loader/writer (round-trips JSONL → objects → JSONL)
+      — `corpus/manifest.py` (`CorpusSample`, `CorpusSpan`, `dump_manifest`/`load_manifest`)
+- [x] Generator produces, deterministically (fixed seed), at least one positive and one benign sample for
+      all 13 in-scope families (`PT.INVIS.*` ×8, `PT.DECEIVE.*` ×5) — 3 of each per family, 78 samples total,
+      `corpus/manifests/corpus.jsonl` (`corpus/generate_corpus.py`)
+- [x] Benign multilingual corpus present per approved D3 sourcing: Persian, Hindi, Arabic, Hebrew,
+      Vietnamese, Chinese, plus an emoji-heavy sample set — `corpus/benign/{fa,hi,ar,he,vi,zh,emoji}.txt`,
+      sourcing documented in `corpus/benign/SOURCES.md`
+- [x] Every new family generator has both a positive and a benign sample (CLAUDE.md rule 7's own
       corpus obligation, self-checked by a test — no detector consumes this yet, but the corpus
-      itself must not violate the rule it exists to satisfy)
-- [ ] No network access anywhere in `corpus/` code (generator or tests)
-- [ ] Tests pass offline & deterministically (`uv run --no-sync pytest`)
-- [ ] `ruff check` / `ruff format --check` / `mypy src/phantomtext` clean (and `corpus/` if it's
-      brought under the same lint/type config — Type-2, log the choice)
-- [ ] `STATUS.md` — "Ground-truth corpus" row flips from ☐ to ✅, scoped explicitly to text-level
+      itself must not violate the rule it exists to satisfy) — `tests/test_corpus.py::TestFamilyCoverage`
+- [x] No network access anywhere in `corpus/` code (generator or tests) — verified by inspection and by
+      `TestGeneratorDeterminism::test_no_network_imports`
+- [x] Tests pass offline & deterministically (`uv run --no-sync pytest`) — 86 passed, 2 xfailed (31 new)
+- [x] `ruff check` / `ruff format --check` / `mypy src/phantomtext` clean, and `corpus/` under the same
+      config (Type-2, logged) — `ruff check corpus`, `mypy corpus` both clean
+- [x] `STATUS.md` — "Ground-truth corpus" row flips from ☐ to ✅, scoped explicitly to text-level
       families with a note pointing DOC-level coverage at ARC-401/ARC-405
-- [ ] `HANDOFF.md` updated with a next task (ARC-204) that needs no maintainer action
-- [ ] Type-2 decisions (module layout, legacy-code reuse per family, seeding scheme, sample volume)
-      logged in `DECISION-LOG.md`
+- [x] `HANDOFF.md` updated with a next task (ARC-203 review, then ARC-204) that needs no maintainer action
+- [x] Type-2 decisions (module layout, legacy-code reuse per family, seeding scheme, sample volume,
+      lint/type scope) logged in `DECISION-LOG.md`
 
 ## Session log
 - **2026-09-13** — Arc file drafted via `/arc-plan`. D1–D3 (Type-1) identified and proposed, not yet
   decided — next step is `/decide`.
 - **2026-09-13** — D1–D3 approved as recommended via `/decide` — see
   [ADR-015](../../decisions/ADR-015-ground-truth-corpus.md). Implementation starting.
+- **2026-09-13** — Implemented `corpus/manifest.py` (schema), `corpus/generators/{common,spans,invis,
+  deceive}.py` (13 family generators, 5 reusing legacy `phantomtext.obfuscation.*` per ADR-012, 8 written
+  fresh), `corpus/generate_corpus.py` (CLI), and `corpus/benign/*` (UDHR-sourced multilingual + emoji
+  smoke corpus). 31 new tests in `tests/test_corpus.py`. Generator output verified deterministic
+  (byte-identical across two runs) and spot-checked sample-by-sample against the taxonomy's own canonical
+  examples. All gates green: 86 passed/2 xfailed, ruff/mypy clean on both `src/` and `corpus/`. Ready for
+  review.

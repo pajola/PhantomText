@@ -1,0 +1,2 @@
+Common ZWJ and VS16 emoji sequences (UTS #51), registered and rendered as single glyphs:
+👨‍👩‍👧‍👦 🏳️‍🌈 👩‍💻 ❤️ ☯️
