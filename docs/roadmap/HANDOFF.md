@@ -10,40 +10,38 @@ is right — correct this file first, say so, then continue.
 
 ## Current position
 - **Season:** 2 — Ground Truth & the Detection Spec
-- **Active arc:** none — ARC-202 merged; ARC-203 not yet drafted
-- **Branch:** none — create `arc/203-ground-truth-corpus` off `main` once the arc file is drafted
+- **Active arc:** ARC-203 (ground-truth corpus & generator) — implemented on
+  `arc/203-ground-truth-corpus`, **awaiting review** (PR not yet opened)
+- **Branch:** `arc/203-ground-truth-corpus`
 - **Next release target:** 0.2.0 (end of Season 3)
-- **Review queue:** empty ✅ (cap is 1)
+- **Review queue:** ARC-203 (1/1 — at cap; do not open a new arc until this is reviewed)
 
 ## >>> START HERE (next session)
-This task needs **no maintainer action to begin**. Start it unattended.
+**Review queue is at cap (1).** Per CLAUDE.md's review-queue rule, the next session's job is to
+make ARC-203's review cheap, not to open ARC-204. This needs **no maintainer action to begin**.
 
-1. Run Step 0 verification (`CLAUDE.md`). Confirm `main` is clean and the suite is green (57
-   passed, 2 xfailed).
-2. There is no `docs/roadmap/arcs/ARC-203-*.md` yet — run `/arc-plan` to draft it from
-   `ROADMAP.md`'s ARC-203 entry ("clean/attacked pairs across family × format with a JSONL
-   manifest... must include a benign corpus: real multilingual text ... that must yield zero
-   findings") before branching or implementing.
-3. Read `docs/spec/TAXONOMY.md` and `src/phantomtext/core/report.py` first — the corpus manifest
-   will reference family IDs (ADR-013) and almost certainly wants to reuse or mirror the `Finding`
-   shape (ADR-014) for its labels, so both need to be known quantities before designing the
-   manifest format.
-4. This arc is **not** a Type-1 gate by the roadmap's own description, but "the JSONL manifest
-   shape" is exactly the kind of thing that's easy to mistake for Type-2 when it's really closer to
-   a serialized format later arcs (ARC-204's baseline) will freeze against — don't manufacture
-   doubt, but don't wave it through either; the arc-planning pass should classify it honestly.
-5. Remember CLAUDE.md rule 7: no detection family may merge without both positive and benign
-   samples. There is no detector yet (Season 3), so this arc's job is building the corpus and its
-   generator, not wiring it into anything that grades a detector.
+1. Run Step 0 verification (`CLAUDE.md`) against branch `arc/203-ground-truth-corpus`.
+2. If a PR for ARC-203 doesn't exist yet: run `/arc-ship` to produce the diff summary, risk notes,
+   test evidence, and PR body/merge command, then open the PR.
+3. If the PR already exists and the maintainer has acted (approved/requested changes): address
+   feedback, or — once merged — draft ARC-204 (`/arc-plan`) as the next arc. ARC-204 (evaluation
+   harness) directly consumes ARC-203's manifest (`corpus/manifests/corpus.jsonl`,
+   `corpus.manifest.CorpusSample`), so re-read `corpus/manifest.py` first.
+4. If the PR exists and is still unreviewed: do not open a new arc. There is nothing else this
+   session should start.
 
-## Git state *(verified 2026-09-11)*
-- `main` @ `2e9f124` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
-  + ARC-201 threat taxonomy (#10) + **ARC-202 Finding/Report schema (#11)** merged. Working tree
-  clean.
+## Git state *(verified 2026-09-13)*
+- `main` @ `a92ae21` — Season 0 (#1,#3,#4,#5) + ARC-101 (#6) + ARC-102 (#7) + the project re-cut (#9)
+  + ARC-201 threat taxonomy (#10) + ARC-202 Finding/Report schema (#11) merged. Working tree clean
+  on `main`.
+- `arc/203-ground-truth-corpus`, off `main` @ `a92ae21`: ARC-203 plan + ADR-015 (D1-D3) + full
+  implementation (`corpus/manifest.py`, `corpus/generators/*`, `corpus/generate_corpus.py`,
+  `corpus/benign/*`, `tests/test_corpus.py`) committed. Not yet pushed / PR not yet opened.
 - `arc/202-finding-schema` remote branch was deleted on merge — no stale branches remain.
 - `arc/103-string-first-api` (PR #8) was **closed, not merged** — superseded per ADR-009, as expected.
-- Library is fully offline (no runtime network anywhere). Suite: 57 passed, 2 xfailed; ruff/mypy
-  clean.
+- Library is fully offline (no runtime network anywhere). Suite on `arc/203-ground-truth-corpus`:
+  86 passed, 2 xfailed (55 on `main` + 31 new in `tests/test_corpus.py`); ruff/mypy clean on both
+  `src/` and `corpus/`.
 
 ## Done
 - 2026-08-03 — ARC-001 (governance) + ARC-002 (src layout / hygiene). *(#1, #3)*
@@ -65,12 +63,13 @@ This task needs **no maintainer action to begin**. Start it unattended.
   Type-2 amendment, not re-gated. *(#11)*
 
 ## Next steps
-1. **ARC-203 — Ground-truth corpus & generator** (this session's target; unblocked, but needs
-   `/arc-plan` first — no arc file exists yet).
-2. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2.
+1. **Review ARC-203** — implemented on `arc/203-ground-truth-corpus`, PR not yet opened. Run
+   `/arc-ship` to prepare it.
+2. ARC-204 — Evaluation harness + CI regression gate. Closes Season 2 (blocked on ARC-203 merging).
 
 ## Open questions / awaiting maintainer
-- None. The queue is deliberately empty. **Keep it that way** — see the review-queue cap in `CLAUDE.md`.
+- **ARC-203 awaiting review** (PR to be opened via `/arc-ship`). This is the one arc the review-queue
+  cap allows — do not open ARC-204 or any other arc until this is reviewed and merged.
 
 ## Post-mortem: why the project stalled 2026-08-05 → 2026-09-10
 Recorded here so a future session does not recreate the conditions.
